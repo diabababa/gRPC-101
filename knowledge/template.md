@@ -1,9 +1,16 @@
 # [Title of Presentation / Article / Paper]
 
 **Author/Speaker:** [Name]
+
 **Date:** [YYYY-MM-DD]
+
 **Source/Event:** [Link, Journal Name, Conference, etc.]
+
 **Tags:** #tag1 #tag2 #tag3
+
+**Written by:**
+
+**Read by:**
 
 ---
 
