@@ -3,6 +3,7 @@
 import grpc
 import warnings
 
+import route_guide_pb2 as route__guide__pb2
 
 GRPC_GENERATED_VERSION = '1.80.0'
 GRPC_VERSION = grpc.__version__
@@ -26,9 +27,7 @@ if _version_not_supported:
 
 class RouteGuideStub(object):
     """Interface exported by the server.
-    ///////////////////////////////////////////////////////////////////////////
-    Codelab Hint: Define streaming RPC methods here
-    ///////////////////////////////////////////////////////////////////////////
+    Definition of the service goes here
     """
 
     def __init__(self, channel):
@@ -37,18 +36,33 @@ class RouteGuideStub(object):
         Args:
             channel: A grpc.Channel.
         """
+        self.GetFeature = channel.unary_unary(
+                '/routeguide.RouteGuide/GetFeature',
+                request_serializer=route__guide__pb2.Point.SerializeToString,
+                response_deserializer=route__guide__pb2.Feature.FromString,
+                _registered_method=True)
 
 
 class RouteGuideServicer(object):
     """Interface exported by the server.
-    ///////////////////////////////////////////////////////////////////////////
-    Codelab Hint: Define streaming RPC methods here
-    ///////////////////////////////////////////////////////////////////////////
+    Definition of the service goes here
     """
+
+    def GetFeature(self, request, context):
+        """Obtains the feature at a given position.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
 
 def add_RouteGuideServicer_to_server(servicer, server):
     rpc_method_handlers = {
+            'GetFeature': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetFeature,
+                    request_deserializer=route__guide__pb2.Point.FromString,
+                    response_serializer=route__guide__pb2.Feature.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'routeguide.RouteGuide', rpc_method_handlers)
@@ -59,7 +73,32 @@ def add_RouteGuideServicer_to_server(servicer, server):
  # This class is part of an EXPERIMENTAL API.
 class RouteGuide(object):
     """Interface exported by the server.
-    ///////////////////////////////////////////////////////////////////////////
-    Codelab Hint: Define streaming RPC methods here
-    ///////////////////////////////////////////////////////////////////////////
+    Definition of the service goes here
     """
+
+    @staticmethod
+    def GetFeature(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/routeguide.RouteGuide/GetFeature',
+            route__guide__pb2.Point.SerializeToString,
+            route__guide__pb2.Feature.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)

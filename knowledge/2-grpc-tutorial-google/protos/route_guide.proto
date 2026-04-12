@@ -23,9 +23,10 @@ option objc_class_prefix = "RTG";
 
 // Interface exported by the server.
 service RouteGuide {
-  /////////////////////////////////////////////////////////////////////////////
-  // Codelab Hint: Define streaming RPC methods here
-  /////////////////////////////////////////////////////////////////////////////
+  // Definition of the service goes here
+
+  // Obtains the feature at a given position.
+  rpc GetFeature(Point) returns (Feature) {}
 }
 
 // Points are represented as latitude-longitude pairs.
@@ -38,18 +39,19 @@ message Point {
 // A latitude-longitude rectangle, represented as two diagonally opposite
 // points "lo" and "hi".
 message Rectangle {
-  /////////////////////////////////////////////////////////////////////////////
-  // Codelab Hint: Define the Rectangle messages here
-  /////////////////////////////////////////////////////////////////////////////
+  int32 latitude = 1;
+  int32 longitude = 2;
 }
 
 // A feature names something at a given point.
 //
 // If a feature could not be named, the name is empty.
 message Feature {
-  /////////////////////////////////////////////////////////////////////////////
-  // Codelab Hint: Define the Feature messages here
-  /////////////////////////////////////////////////////////////////////////////
+  // The name or address of the feature.
+  string name = 1;
+
+  // The point where the feature is located.
+  Point location = 2;
 }
 
 // A RouteNote is a message sent while at a given point.

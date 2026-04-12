@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11route_guide.proto\x12\nrouteguide\"\x07\n\x05Point\"\x0b\n\tRectangle\"\t\n\x07\x46\x65\x61ture\"\x0b\n\tRouteNote\"\x0e\n\x0cRouteSummary2\x0c\n\nRouteGuideB6\n\x1bio.grpc.examples.routeguideB\x0fRouteGuideProtoP\x01\xa2\x02\x03RTGb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11route_guide.proto\x12\nrouteguide\"\x07\n\x05Point\"0\n\tRectangle\x12\x10\n\x08latitude\x18\x01 \x01(\x05\x12\x11\n\tlongitude\x18\x02 \x01(\x05\"<\n\x07\x46\x65\x61ture\x12\x0c\n\x04name\x18\x01 \x01(\t\x12#\n\x08location\x18\x02 \x01(\x0b\x32\x11.routeguide.Point\"\x0b\n\tRouteNote\"\x0e\n\x0cRouteSummary2D\n\nRouteGuide\x12\x36\n\nGetFeature\x12\x11.routeguide.Point\x1a\x13.routeguide.Feature\"\x00\x42\x36\n\x1bio.grpc.examples.routeguideB\x0fRouteGuideProtoP\x01\xa2\x02\x03RTGb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,13 +35,13 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_POINT']._serialized_start=33
   _globals['_POINT']._serialized_end=40
   _globals['_RECTANGLE']._serialized_start=42
-  _globals['_RECTANGLE']._serialized_end=53
-  _globals['_FEATURE']._serialized_start=55
-  _globals['_FEATURE']._serialized_end=64
-  _globals['_ROUTENOTE']._serialized_start=66
-  _globals['_ROUTENOTE']._serialized_end=77
-  _globals['_ROUTESUMMARY']._serialized_start=79
-  _globals['_ROUTESUMMARY']._serialized_end=93
-  _globals['_ROUTEGUIDE']._serialized_start=95
-  _globals['_ROUTEGUIDE']._serialized_end=107
+  _globals['_RECTANGLE']._serialized_end=90
+  _globals['_FEATURE']._serialized_start=92
+  _globals['_FEATURE']._serialized_end=152
+  _globals['_ROUTENOTE']._serialized_start=154
+  _globals['_ROUTENOTE']._serialized_end=165
+  _globals['_ROUTESUMMARY']._serialized_start=167
+  _globals['_ROUTESUMMARY']._serialized_end=181
+  _globals['_ROUTEGUIDE']._serialized_start=183
+  _globals['_ROUTEGUIDE']._serialized_end=251
 # @@protoc_insertion_point(module_scope)
