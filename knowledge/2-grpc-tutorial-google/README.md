@@ -36,3 +36,6 @@ route_guide_pb2.py contains the code that dynamically creates classes generated 
 route_guide_pb2.pyi is a "stub file" or "type hint file" generated from the message definitions. It only contains the signatures with no implementation. Stub files can be used by IDEs to provide better autocompletion and error detection.
 route_guide_pb2_grpc.py is generated from the service definitions and contains gRPC-specific classes and functions.
 
+Observation: 
+The code generation process is deterministic - when you re-run the protoc command with the same .proto files, it will always generate identical output, which ensures consistency across your development team and in CI/CD pipelines.
+
