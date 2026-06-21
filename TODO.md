@@ -38,4 +38,5 @@ TODO: dlaczego inaczje wyglada solution z example? wytlumacz
 TODO: czy moga byc testy po kazdym cwiczeniu, ze uczestnicy odpalaja poe test-exerciese1?
 TODO: how genereators works in python ?
 TODO: TDD in grpc? maybe first right test in grtpc? maybe first test
-maybe whole workshop should be on docker
+TODO: maybe whole workshop should be on docker
+TODO: go for each exercise and check if it's working
