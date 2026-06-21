@@ -40,3 +40,5 @@ TODO: how genereators works in python ?
 TODO: TDD in grpc? maybe first right test in grtpc? maybe first test
 TODO: maybe whole workshop should be on docker
 TODO: go for each exercise and check if it's working
+TODO: add Gherkin test 
+TODO: info to turn off chat support 
