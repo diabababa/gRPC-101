@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: locations_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: locations_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rest-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.rest
+    container_name: rest_api_server
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://user:password@db:5432/locations_db"
+      REST_HOST: "0.0.0.0"
+      REST_PORT: 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  grpc-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.grpc
+    container_name: grpc_api_server
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://user:password@db:5432/locations_db"
+      GRPC_HOST: "0.0.0.0"
+      GRPC_PORT: 50051
+    ports:
+      - "50051:50051"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  locust:
+    image: locustio/locust:latest
+    container_name: locust_master
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./locust-tests:/home/locust
+    environment:
+      REST_HOST: "http://rest-api:8000"
+    depends_on:
+      - rest-api
+
+volumes:
+  postgres_data:

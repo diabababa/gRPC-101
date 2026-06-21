@@ -1,0 +1,24 @@
+# gRPC API Dockerfile
+FROM python:3.14-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy project
+COPY pyproject.toml uv.lock* ./
+COPY shared ./shared
+COPY grpc-api ./grpc-api
+
+# Install uv and dependencies
+RUN pip install --no-cache-dir uv && uv venv && . .venv/bin/activate && uv sync
+
+# Activate venv in PATH
+ENV PATH="/app/.venv/bin:$PATH"
+
+EXPOSE 50051
+
+CMD ["python", "-m", "grpc-api.server"]

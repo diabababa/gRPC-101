@@ -20,3 +20,11 @@
 - [Where should you use gRPC? And where NOT to use it!](https://www.youtube.com/watch?v=4SuFtQV8RCk)
 - [gRPC vs REST vs GraphQL: Comparison & Performance](https://www.youtube.com/watch?v=uH0SxYdsjv4)
 - [gRPC vs REST: Why Isn’t Everyone Using gRPC?](https://www.youtube.com/watch?v=WpXs7e7kEoI)
+
+
+https://www.youtube.com/watch?v=UQ-nXHwdSFU
+
+https://www.youtube.com/watch?v=46O73On0gyI
+
+https://www.youtube.com/watch?v=5dMK5OW6WSw
+

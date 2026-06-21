@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package locations;
+
+option go_package = "github.com/example/locations";
+option java_multiple_files = true;
+option java_package = "com.example.locations";
+option java_outer_classname = "LocationsProto";
+
+// Location represents a geographical point with metadata
+message Location {
+    int32 id = 1;
+    string name = 2;
+    float latitude = 3;
+    float longitude = 4;
+    string description = 5;
+    string type = 6;  // "restaurant", "hotel", "museum", etc.
+    int32 rating = 7;
+    int32 review_count = 8;
+}
+
+// Search request with location and radius
+message SearchLocationsRequest {
+    float latitude = 1;
+    float longitude = 2;
+    float radius_km = 3;  // Search radius in kilometers
+    int32 limit = 4;      // Max results
+}
+
+// Search response with list of locations
+message SearchLocationsReply {
+    repeated Location locations = 1;
+    int32 total = 2;
+}
+
+// Stream nearby locations request
+message StreamNearbyRequest {
+    float latitude = 1;
+    float longitude = 2;
+    float radius_km = 3;
+}
+
+// Location update for streaming
+message LocationUpdate {
+    Location location = 1;
+    int64 timestamp = 2;
+    float distance_km = 3;
+}
+
+// Batch upload request
+message BatchUploadRequest {
+    repeated Location locations = 1;
+}
+
+// Upload response
+message UploadResponse {
+    int32 uploaded_count = 1;
+    int32 failed_count = 2;
+    string message = 3;
+}
+
+// Realtime sync data from client
+message LocationData {
+    int32 location_id = 1;
+    float latitude = 2;
+    float longitude = 3;
+    int64 timestamp = 4;
+}
+
+// Sync response from server
+message SyncResponse {
+    bool acknowledged = 1;
+    string message = 2;
+    repeated Location nearby_recommendations = 3;
+}
+
+// Get location by ID request
+message GetLocationRequest {
+    int32 id = 1;
+}
+
+// Create location request
+message CreateLocationRequest {
+    string name = 1;
+    float latitude = 2;
+    float longitude = 3;
+    string description = 4;
+    string type = 5;
+}
+
+// Update location request
+message UpdateLocationRequest {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    string type = 4;
+}
+
+// Delete location request
+message DeleteLocationRequest {
+    int32 id = 1;
+}
+
+// Empty response
+message Empty {}
+
+// Error details
+message ErrorDetails {
+    int32 code = 1;
+    string message = 2;
+}
+
+service LocationService {
+    // Unary RPCs
+    rpc SearchLocations(SearchLocationsRequest) returns (SearchLocationsReply);
+    rpc GetLocation(GetLocationRequest) returns (Location);
+    rpc CreateLocation(CreateLocationRequest) returns (Location);
+    rpc UpdateLocation(UpdateLocationRequest) returns (Location);
+    rpc DeleteLocation(DeleteLocationRequest) returns (Empty);
+
+    // Server streaming RPC
+    rpc StreamNearbyLocations(StreamNearbyRequest) returns (stream LocationUpdate);
+
+    // Client streaming RPC
+    rpc BatchUploadLocations(stream Location) returns (UploadResponse);
+
+    // Bidirectional streaming RPC
+    rpc RealTimeLocationSync(stream LocationData) returns (stream SyncResponse);
+}
