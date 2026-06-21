@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package chat;
+
+// ChatService exposes four RPC patterns demonstrating the full range of gRPC communication.
+service ChatService {
+  // Unary: send one message, get one acknowledgement
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+
+  // Server streaming: request history, receive messages one by one
+  rpc GetHistory (HistoryRequest) returns (stream Message);
+
+  // Client streaming: send a batch of messages, get a summary
+  rpc SendBulkMessages (stream MessageRequest) returns (BulkResponse);
+
+  // Bidirectional streaming: real-time chat
+  rpc Chat (stream MessageRequest) returns (stream Message);
+}
+
+// --- Request / Response messages ---
+
+message MessageRequest {
+  string room_id  = 1;
+  string user     = 2;
+  string content  = 3;
+}
+
+message MessageResponse {
+  string message_id = 1;
+  string status     = 2;  // "ok" | "error"
+  int64  timestamp  = 3;
+}
+
+message HistoryRequest {
+  string room_id = 1;
+  int32  limit   = 2;  // 0 means "all"
+}
+
+message BulkResponse {
+  int32 messages_sent   = 1;
+  int32 messages_failed = 2;
+}
+
+// --- Domain messages ---
+
+message Message {
+  string message_id = 1;
+  string room_id    = 2;
+  string user       = 3;
+  string content    = 4;
+  int64  timestamp  = 5;
+}

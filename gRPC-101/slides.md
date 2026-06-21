@@ -1,642 +1,1019 @@
 ---
-# try also 'default' to start simple
-theme: default
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
+theme: seriph
 background: https://cover.sli.dev
-# some information about your slides (markdown enabled)
-title: gRPC 101
+title: "gRPC for Beginners"
 info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
-
-  Learn more at [Sli.dev](https://sli.dev)
-# apply UnoCSS classes to the current slide
+  ## gRPC for Beginners
+  EuroPython 2026 — 3-hour hands-on workshop
+  Build a real-time chat service with gRPC and Python
 class: text-center
-# https://sli.dev/features/drawing
 drawings:
   persist: false
-# slide transition: https://sli.dev/guide/animations.html#slide-transitions
 transition: slide-left
-# enable Comark Syntax: https://comark.dev/syntax/markdown
-comark: true
-# duration of the presentation
-duration: 35min
+duration: 180min
+highlighter: shiki
+lineNumbers: true
 ---
 
-# gRPC 101
+# gRPC for Beginners
 
-Presentation slides for developers
+Build a real-time chat service with Python
+
+<div class="text-gray-400 mt-4">EuroPython 2026 · Kraków · 3h Workshop</div>
 
 <div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
-</div>
-
-<div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
-    <carbon:logo-github />
-  </a>
+  Press Space to start <carbon:arrow-right />
 </div>
 
 <!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
+Welcome everyone! Today you'll build a real chat service using gRPC — from proto definition to load testing. Laptop + Docker = you're ready.
 -->
+
 ---
 hideInToc: true
 ---
+
+# About Us
+
+<div class="grid grid-cols-2 gap-8 mt-8">
+<div class="text-center">
+
+**Kamil Kulig**
+
+💼 Building at CTHINGS.CO  
+🐍 Python lover · 🕺 King of Disco  
+📢 PyCon Poland · PyCon Sweden · Python Warsaw
+
+</div>
+<div class="text-center">
+
+**Adam Gorgoń**
+
+📊 Data Scientist  
+🧠 NLP & Statistics enthusiast  
+🐍 Python & Machine Learning
+
+</div>
+</div>
+
+---
+hideInToc: true
+---
+
+# What We'll Build Today
+
+<div class="grid grid-cols-2 gap-8 mt-6">
+<div>
+
+## Chat Service 💬
+
+A real-time messaging service demonstrating **all 4 gRPC patterns**:
+
+- `SendMessage` — unary call
+- `GetHistory` — server streaming
+- `SendBulkMessages` — client streaming
+- `Chat` — bidirectional streaming
+
+</div>
+<div>
+
+## Tech Stack 🛠️
+
+- **uv** — fast package manager
+- **poe** — task runner
+- **ruff** — linter & formatter
+- **pytest** — testing
+- **locust** — load testing
+- **Prometheus + Grafana** — monitoring
+- **Docker** — infrastructure
+
+</div>
+</div>
+
+---
+hideInToc: true
+---
+
 # Agenda
 
 <Toc />
+
 ---
 transition: fade-out
 ---
 
-# What is Slidev?
+# What is RPC?
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+**Remote Procedure Call** — call a function on another machine as if it were local.
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - themes can be shared and re-used as npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embed Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
-<br>
-<br>
-
-Read more about [Why Slidev?](https://sli.dev/guide/why)
-
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/features/slide-scope-style
--->
-
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
-
-<!--
-Here is another comment.
--->
-
----
-transition: slide-up
-level: 2
----
-
-# Navigation
-
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
-
-## Keyboard Shortcuts
-
-|                                                     |                             |
-| --------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                       | previous slide              |
-| <kbd>down</kbd>                                     | next slide                  |
-
-<!-- https://sli.dev/guide/animations.html#click-animation -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
----
-layout: two-cols
-layoutClass: gap-16
----
-
-# Table of contents
-
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1" />
 ```
-
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
-
-::right::
-
-<Toc text-sm minDepth="1" maxDepth="2" />
-
----
-layout: image-right
-image: https://cover.sli.dev
----
-
-# Code
-
-Use code snippets and get the highlighting directly, and even types hover!
-
-```ts [filename-example.ts] {all|4|6|6-7|9|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
-import { computed, ref } from 'vue'
-
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
+Client                          Server
+  |                               |
+  |  sayHello("Alice")  ───────►  |
+  |                               |  execute sayHello()
+  |  ◄───────── "Hello, Alice!"   |
+  |                               |
 ```
-
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="342" color="#953" width="2" arrowSize="1" />
-
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-
-[Learn more](https://sli.dev/features/line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
-
----
-level: 2
----
-
-# Shiki Magic Move
-
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
-
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
-
-````md magic-move {lines: true}
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-})
-```
-
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
-        ]
-      }
-    }
-  }
-}
-```
-
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
-    }
-  })
-}
-```
-
-Non-code blocks are ignored.
-
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-}
-</script>
-```
-````
-
----
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
-check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
-
----
-
-# Clicks Animations
-
-You can add `v-click` to elements to add a click animation.
-
-<div v-click>
-
-This shows up when you click the slide:
-
-```html
-<div v-click>This shows up when you click the slide.</div>
-```
-
-</div>
-
-<br>
 
 <v-click>
 
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
+### The problem with older RPC approaches
 
-```html
-<span v-mark.underline.orange>inline markers</span>
+- CORBA, DCOM, SOAP — complex, brittle, hard to version
+- Tied to specific languages or platforms
+
+</v-click>
+
+<v-click>
+
+### gRPC solves this with
+
+- **Protocol Buffers** — language-neutral, compact serialization
+- **HTTP/2** — multiplexing, streaming, header compression
+- **Code generation** — client/server stubs in 10+ languages
+
+</v-click>
+
+---
+
+# What is gRPC?
+
+**gRPC** = Google Remote Procedure Call (open-sourced 2016, now [CNCF](https://en.wikipedia.org/wiki/Cloud_Native_Computing_Foundation))
+
+<div class="grid grid-cols-2 gap-6 mt-6">
+<div>
+
+### Core components
+
+```
+┌─────────────────────┐
+│   .proto file       │  ← You write this
+│   (contract)        │
+└────────┬────────────┘
+         │ grpc_tools.protoc
+    ┌────▼────┐   ┌────────┐
+    │ Python  │   │  Go    │
+    │  stubs  │   │ stubs  │
+    └────┬────┘   └────────┘
+         │
+   HTTP/2 + Protobuf
+```
+
+</div>
+<div>
+
+### Why gRPC?
+
+- **10x smaller** payloads than JSON
+- **3x faster** serialization
+- **Streaming** built-in (4 patterns)
+- **Strongly typed** contract
+- **Auto-generated** clients in 10+ languages
+- **Deadlines & cancellation** built in
+
+</div>
+</div>
+
+---
+
+# gRPC vs REST
+
+| Feature | REST / HTTP | gRPC |
+|---------|------------|------|
+| Protocol | HTTP/1.1 | HTTP/2 |
+| Format | JSON (text) | Protocol Buffers (binary) |
+| Contract | OpenAPI (optional) | `.proto` (required) |
+| Streaming | Limited (SSE, WebSocket) | 4 native patterns |
+| Code gen | Optional | Built-in |
+| Browser support | Native | Needs grpc-web proxy |
+| Human readable | ✅ Yes | ❌ Binary |
+| Performance | Good | Excellent |
+
+---
+
+# When to Use gRPC
+
+<div class="grid grid-cols-2 gap-8 mt-4">
+<div>
+
+### ✅ Good fit
+
+- Microservice-to-microservice communication
+- Real-time bidirectional streaming (chat, IoT, gaming)
+- Polyglot environments (Python + Go + Java)
+- High-throughput, low-latency APIs
+- Mobile clients (efficient bandwidth)
+
+</div>
+<div>
+
+### ❌ Not the best fit
+
+- Public APIs consumed by browsers directly
+- Simple CRUD with occasional calls
+- Teams unfamiliar with Protobuf
+- Debugging / human inspection of traffic
+- Simple scripts & one-off tools
+
+</div>
+</div>
+
+<v-click>
+
+> **Today's rule of thumb**: gRPC between services, REST at the edge
+
+</v-click>
+
+---
+
+# Protocol Buffers — The Language of gRPC
+
+**Protobuf** is a language-neutral schema language and binary serialization format.
+
+```proto
+syntax = "proto3";
+
+package chat;
+
+message MessageRequest {
+  string room_id = 1;   // ← field number, NOT value
+  string user    = 2;
+  string content = 3;
+}
+```
+
+<v-clicks>
+
+- Field numbers (1, 2, 3…) identify fields in binary — **never change them**
+- Types: `string`, `int32`, `int64`, `bool`, `float`, `double`, `bytes`
+- Collections: `repeated string tags = 4;`
+- Optional fields (proto3): all fields are optional by default
+
+</v-clicks>
+
+---
+
+# Proto Data Types Cheat Sheet
+
+```proto
+message Example {
+  // Strings & bytes
+  string name     = 1;
+  bytes  data     = 2;
+
+  // Numbers
+  int32  count    = 3;
+  int64  size     = 4;
+  float  score    = 5;
+  double precise  = 6;
+
+  // Boolean
+  bool   active   = 7;
+
+  // Repeated (list)
+  repeated string tags = 8;
+
+  // Enum
+  Status status = 9;
+}
+
+enum Status {
+  UNKNOWN = 0;   // proto3: first value MUST be 0
+  ACTIVE  = 1;
+  BANNED  = 2;
+}
+```
+
+---
+
+# Defining a gRPC Service
+
+```proto
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+  // Unary: one request → one response
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+
+  // Server streaming: one request → stream of responses
+  rpc GetHistory (HistoryRequest) returns (stream Message);
+
+  // Client streaming: stream of requests → one response
+  rpc SendBulkMessages (stream MessageRequest) returns (BulkResponse);
+
+  // Bidirectional: stream of requests → stream of responses
+  rpc Chat (stream MessageRequest) returns (stream Message);
+}
+```
+
+<v-click>
+
+`stream` keyword = the only difference between the 4 patterns!
+
+</v-click>
+
+---
+
+# Code Generation
+
+```bash
+# Install tools
+uv add grpcio grpcio-tools
+
+# Generate Python stubs from .proto
+python -m grpc_tools.protoc \
+  -I protos \
+  --python_out=chat/generated \
+  --grpc_python_out=chat/generated \
+  protos/chat.proto
+```
+
+This produces:
+- `chat_pb2.py` — message classes (MessageRequest, MessageResponse…)
+- `chat_pb2_grpc.py` — service stubs (ChatServiceStub, ChatServiceServicer…)
+
+<v-click>
+
+```bash
+# Or just use the poe task we prepared:
+poe generate
 ```
 
 </v-click>
 
-<div mt-20 v-click>
+---
 
-[Learn more](https://sli.dev/guide/animations#click-animation)
+# 🛠️ Exercise 1: Protocol Buffers (30 min)
 
+Open `exercises/01_protocol_buffers/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Your task
+
+Define the chat service schema in `chat_starter.proto`:
+
+1. Define `MessageRequest` message  
+2. Define `MessageResponse` message  
+3. Define `Message` message  
+4. Define `HistoryRequest` message  
+5. Define `BulkResponse` message  
+6. Define `ChatService` with all 4 RPCs
+
+</div>
+<div>
+
+### Tips
+
+```bash
+# Check your proto syntax
+python -m grpc_tools.protoc \
+  -I exercises/01_protocol_buffers \
+  --python_out=/tmp \
+  --grpc_python_out=/tmp \
+  exercises/01_protocol_buffers/chat_starter.proto
+
+# Solution in:
+solutions/01_protocol_buffers/chat.proto
+```
+
+</div>
 </div>
 
 ---
 
-# Motions
+# Project Setup
 
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
+```bash
+# Clone & enter workshop
+cd workshop
 
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
+# Create virtualenv and install deps
+uv sync
+
+# Generate gRPC code from .proto
+poe generate
+
+# Verify
+ls chat/generated/
+# chat_pb2.py  chat_pb2_grpc.py
 ```
 
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
-  </div>
+<v-click>
 
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
+### Available poe tasks
 
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
+```bash
+poe generate   # generate stubs from protos/chat.proto
+poe server     # start gRPC server (port 50051)
+poe test       # run pytest
+poe lint       # ruff check
+poe fmt        # ruff format
+poe locust     # start Locust UI
+```
 
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn more](https://sli.dev/guide/animations.html#motion)
-
-</div>
+</v-click>
 
 ---
 
-# $\LaTeX$
+# The Server — Implementing ChatServicer
 
-$\LaTeX$ is supported out-of-box. Powered by [$\KaTeX$](https://katex.org/).
+```python {all|1-3|6-10|12-20|22-27}
+import grpc
+from concurrent import futures
+from chat.generated import chat_pb2, chat_pb2_grpc
 
-<div h-3 />
+# Your servicer inherits from the generated base class
+class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
 
-Inline $\sqrt{3x-1}+(1+x)^2$
+    def __init__(self):
+        self._store: dict[str, list] = {}  # room_id → [Message]
 
-Block
-$$ {1|3|all}
-\begin{aligned}
-\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
-\nabla \cdot \vec{B} &= 0 \\
-\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
-\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
-\end{aligned}
-$$
+    def SendMessage(self, request, context):
+        # request: MessageRequest
+        # context: grpc.ServicerContext (deadlines, metadata, cancel)
+        msg = self._save_message(request)
+        return chat_pb2.MessageResponse(
+            message_id=msg.message_id,
+            status="ok",
+            timestamp=msg.timestamp,
+        )
 
-[Learn more](https://sli.dev/features/latex)
+def serve(port: int = 50051):
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
+    server.add_insecure_port(f"[::]:{port}")
+    server.start()
+    server.wait_for_termination()
+```
 
 ---
 
-# Diagrams
+# The Client — Stubs and Channels
 
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
+```python {all|1-6|8-14|16-22}
+import grpc
+from chat.generated import chat_pb2, chat_pb2_grpc
 
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
+# Channel = connection to server (reuse across calls)
+channel = grpc.insecure_channel("localhost:50051")
+stub = chat_pb2_grpc.ChatServiceStub(channel)
 
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
+# Unary call — just like a local function
+response = stub.SendMessage(
+    chat_pb2.MessageRequest(
+        room_id="general",
+        user="alice",
+        content="Hello, EuroPython!",
+    )
+)
+print(f"Message ID: {response.message_id}")
+
+# With context manager (auto-closes channel)
+with grpc.insecure_channel("localhost:50051") as channel:
+    stub = chat_pb2_grpc.ChatServiceStub(channel)
+    response = stub.SendMessage(...)
 ```
 
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
+---
 
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
+# 🛠️ Exercise 2: First gRPC Service (30 min)
 
-```plantuml {scale: 0.7}
-@startuml
+Open `exercises/02_first_service/README.md`
 
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
 
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
+### Task: implement unary `SendMessage`
 
-cloud {
-  [Example 1]
-}
+1. Complete `server_starter.py` — implement `SendMessage` in the servicer
+2. Complete `client_starter.py` — call `SendMessage` and print the result
+3. Start server: `poe server`
+4. Run client: `python exercises/02_first_service/client_starter.py`
 
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
+</div>
+<div>
 
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
+### The typer CLI
 
-@enduml
+```bash
+# Send a message via CLI
+poe client-send \
+  --room general \
+  --user alice \
+  "Hello EuroPython!"
+
+# Or directly
+python -m chat.main client send \
+  --room general \
+  --user alice \
+  "Hello!"
 ```
 
 </div>
-
-Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
-
----
-foo: bar
-dragPos:
-  square: 691,32,167,_,-16
----
-
-# Draggable Elements
-
-Double-click on the draggable elements to edit their positions.
-
-<br>
-
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <div class="i-carbon:arrow-up" />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="663,206,261,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-
-###### Draggable Arrow
-
-```md
-<v-drag-arrow two-way />
-```
-
-<v-drag-arrow pos="67,452,253,46" two-way op70 />
-
----
-src: ./pages/imported-slides.md
-hide: false
----
+</div>
 
 ---
 
-# Monaco Editor
+# Communication Patterns
 
-Slidev provides built-in Monaco Editor support.
+<div class="grid grid-cols-2 gap-4 mt-4">
 
-Add `{monaco}` to the code block to turn it into an editor:
+<div>
 
-```ts {monaco}
-import { ref } from 'vue'
-import { emptyArray } from './external'
+### 1. Unary (request-response)
+```python
+response = stub.SendMessage(request)
+```
+Use for: simple lookups, mutations
 
-const arr = ref(emptyArray(10))
+### 2. Server streaming
+```python
+for msg in stub.GetHistory(request):
+    print(msg.content)
+```
+Use for: feeds, file downloads, live updates
+
+</div>
+<div>
+
+### 3. Client streaming
+```python
+def requests():
+    for msg in messages:
+        yield msg
+
+response = stub.SendBulkMessages(requests())
+```
+Use for: file uploads, bulk inserts
+
+### 4. Bidirectional streaming
+```python
+def requests():
+    for msg in user_input():
+        yield msg
+
+for reply in stub.Chat(requests()):
+    print(reply.content)
+```
+Use for: chat, gaming, real-time collaboration
+
+</div>
+</div>
+
+---
+
+# Server Streaming — Implementation
+
+```python
+# Server side — yield messages one by one
+def GetHistory(self, request, context):
+    messages = self._store.get(request.room_id, [])
+    limit = request.limit or len(messages)
+    for msg in messages[-limit:]:
+        yield msg  # ← just yield, gRPC handles the stream
+
+# Client side — iterate like any Python generator
+for message in stub.GetHistory(
+    chat_pb2.HistoryRequest(room_id="general", limit=10)
+):
+    print(f"[{message.user}]: {message.content}")
 ```
 
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
+---
 
-```ts {monaco-run}
-import { version } from 'vue'
-import { emptyArray, sayHello } from './external'
+# Bidirectional Streaming — Implementation
 
-sayHello()
-console.log(`vue ${version}`)
-console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
+```python
+# Server side — iterate request stream, yield responses
+def Chat(self, request_iterator, context):
+    for request in request_iterator:
+        msg = self._save_message(request)
+        yield msg  # echo back as Message
+
+# Client side — generator feeds requests, iterate responses
+import threading
+
+def user_messages():
+    for line in sys.stdin:
+        yield chat_pb2.MessageRequest(
+            room_id="general",
+            user="alice",
+            content=line.strip(),
+        )
+
+for reply in stub.Chat(user_messages()):
+    print(f"[{reply.user}]: {reply.content}")
 ```
+
+---
+
+# 🛠️ Exercise 3: Streaming Patterns (20 min)
+
+Open `exercises/03_streaming/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Tasks
+
+1. Implement `GetHistory` (server streaming) in the servicer
+2. Implement the client loop that prints streamed messages
+3. *Bonus:* implement `SendBulkMessages` (client streaming)
+4. *Bonus:* implement `Chat` (bidirectional)
+
+</div>
+<div>
+
+### Test it
+
+```bash
+# Start server
+poe server
+
+# Get history (server streaming)
+python -m chat.main client history \
+  --room general --limit 5
+
+# Bidirectional chat
+python -m chat.main client chat \
+  --room general --user alice
+```
+
+</div>
+</div>
+
+---
+
+# Error Handling in gRPC
+
+```python
+import grpc
+
+# Server — set status codes
+def SendMessage(self, request, context):
+    if not request.content:
+        context.abort(
+            grpc.StatusCode.INVALID_ARGUMENT,
+            "Message content cannot be empty",
+        )
+    ...
+
+# Client — catch RpcError
+try:
+    response = stub.SendMessage(request)
+except grpc.RpcError as e:
+    print(f"Code: {e.code()}")       # grpc.StatusCode.INVALID_ARGUMENT
+    print(f"Details: {e.details()}")  # "Message content cannot be empty"
+```
+
+Common status codes: `OK`, `NOT_FOUND`, `INVALID_ARGUMENT`, `UNAUTHENTICATED`, `PERMISSION_DENIED`, `DEADLINE_EXCEEDED`, `UNAVAILABLE`
+
+---
+
+# Testing gRPC Services with pytest
+
+```python
+# tests/conftest.py
+import pytest
+import grpc
+from concurrent import futures
+from chat.server import ChatServicer
+from chat.generated import chat_pb2_grpc
+
+@pytest.fixture(scope="session")
+def grpc_server():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
+    chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
+    port = server.add_insecure_port("[::]:0")  # OS picks a free port
+    server.start()
+    yield f"localhost:{port}"
+    server.stop(grace=None)
+
+@pytest.fixture
+def stub(grpc_server):
+    with grpc.insecure_channel(grpc_server) as channel:
+        yield chat_pb2_grpc.ChatServiceStub(channel)
+```
+
+---
+
+# Writing gRPC Tests
+
+```python
+# tests/test_chat.py
+from chat.generated import chat_pb2
+
+def test_send_message_returns_message_id(stub):
+    response = stub.SendMessage(
+        chat_pb2.MessageRequest(
+            room_id="test-room",
+            user="alice",
+            content="Hello!",
+        )
+    )
+    assert response.message_id != ""
+    assert response.status == "ok"
+
+def test_get_history_streams_messages(stub):
+    # Send 3 messages first
+    for i in range(3):
+        stub.SendMessage(chat_pb2.MessageRequest(
+            room_id="history-room", user="alice", content=f"msg {i}"
+        ))
+
+    messages = list(stub.GetHistory(
+        chat_pb2.HistoryRequest(room_id="history-room", limit=10)
+    ))
+    assert len(messages) == 3
+```
+
+---
+
+# 🛠️ Exercise 4: Testing (20 min)
+
+Open `exercises/04_testing/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Tasks
+
+1. Write a test for `SendMessage` — verify message_id and status
+2. Write a test for `GetHistory` — verify correct count of messages
+3. Write a test for error handling — send empty content, expect `INVALID_ARGUMENT`
+4. *Bonus:* test `SendBulkMessages`
+
+</div>
+<div>
+
+### Run tests
+
+```bash
+poe test
+
+# or verbose
+pytest tests/test_chat.py -v
+
+# run specific test
+pytest tests/test_chat.py::test_send_message -v
+```
+
+</div>
+</div>
+
+---
+
+# Performance Testing with Locust
+
+**Locust** — load testing in pure Python. Simulates concurrent users sending requests.
+
+```python
+# tests/locustfile.py
+from locust import User, task, between, events
+import grpc, time
+from chat.generated import chat_pb2, chat_pb2_grpc
+
+class GrpcUser(User):
+    abstract = True
+
+    def on_start(self):
+        self._channel = grpc.insecure_channel("localhost:50051")
+        self._stub = chat_pb2_grpc.ChatServiceStub(self._channel)
+
+class ChatUser(GrpcUser):
+    wait_time = between(0.5, 2)  # random wait between tasks
+
+    @task(3)  # weight: called 3x more than other tasks
+    def send_message(self):
+        self._stub.SendMessage(chat_pb2.MessageRequest(
+            room_id="perf-room",
+            user="locust",
+            content="Load test message",
+        ))
+```
+
+---
+
+# Running Locust
+
+```bash
+# Start server
+poe server
+
+# Start Locust UI (web interface)
+poe locust
+# Open http://localhost:8089
+
+# Or headless (CLI mode)
+locust -f tests/locustfile.py \
+  --headless \
+  --users 50 \
+  --spawn-rate 5 \
+  --run-time 30s
+```
+
+<v-click>
+
+### Key metrics to watch
+
+- **RPS** (requests per second) — throughput
+- **p50 / p95 / p99** — latency percentiles
+- **Failures %** — error rate
+
+</v-click>
+
+---
+
+# 🛠️ Exercise 5: Performance (20 min)
+
+Open `exercises/05_performance/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Tasks
+
+1. Complete `locustfile_starter.py` — add `send_message` task
+2. Add `get_history` task (weight 1)
+3. Start server + locust:
+   ```bash
+   poe server &
+   poe locust
+   ```
+4. Ramp to 100 users, observe metrics
+5. *Bonus:* add `SendBulkMessages` task
+
+</div>
+<div>
+
+### Questions to answer
+
+- What's the max RPS before failures appear?
+- What's the p99 latency at 50 users?
+- Which endpoint is slowest? Why?
+
+</div>
+</div>
+
+---
+
+# Monitoring gRPC with Prometheus
+
+```python
+# chat/server.py
+from prometheus_client import Counter, Histogram, start_http_server
+
+REQUEST_COUNT = Counter(
+    "grpc_requests_total",
+    "Total gRPC requests",
+    ["method", "status"],
+)
+REQUEST_LATENCY = Histogram(
+    "grpc_request_duration_seconds",
+    "gRPC request duration",
+    ["method"],
+)
+
+class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
+    def SendMessage(self, request, context):
+        with REQUEST_LATENCY.labels(method="SendMessage").time():
+            result = self._handle(request, context)
+            REQUEST_COUNT.labels(method="SendMessage", status="ok").inc()
+            return result
+
+# Expose metrics on port 8000
+start_http_server(8000)
+```
+
+---
+
+# Prometheus + Grafana with Docker Compose
+
+```bash
+# Start the full monitoring stack
+docker compose up -d
+
+# Services:
+# - chat-server  → localhost:50051  (gRPC)
+# - prometheus   → localhost:9090   (metrics scraping)
+# - grafana      → localhost:3000   (dashboards)
+#   login: admin / admin
+```
+
+<v-click>
+
+```yaml
+# monitoring/prometheus.yml
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: grpc-chat
+    static_configs:
+      - targets: ["chat-server:8000"]
+```
+
+</v-click>
+
+---
+
+# 🛠️ Exercise 6: Monitoring (20 min)
+
+```bash
+# Start everything
+docker compose up -d
+
+# Send some traffic
+for i in $(seq 1 50); do
+  python -m chat.main client send \
+    --room general --user alice "Message $i"
+done
+
+# Or use locust to generate load
+poe locust --headless --users 20 --spawn-time 5 --run-time 30s
+```
+
+<v-click>
+
+### In Grafana (localhost:3000)
+
+1. Login: `admin` / `admin`
+2. Open Dashboard → **gRPC Chat Service**
+3. Observe: request rate, latency, error rate
+4. Try breaking the server — what happens to metrics?
+
+</v-click>
+
+---
+
+# Key Takeaways
+
+<v-clicks>
+
+1. **gRPC = Protobuf + HTTP/2 + Code gen** — fast, typed, polyglot
+
+2. **4 patterns** — unary, server streaming, client streaming, bidirectional
+
+3. **Proto contract is the source of truth** — define it carefully, field numbers are forever
+
+4. **Testing is straightforward** — start a real server in your fixture, test against it
+
+5. **Locust + Prometheus/Grafana** — measure before optimizing
+
+6. **gRPC shines in microservices** — use REST at the edge, gRPC between services
+
+</v-clicks>
+
+---
+
+# What's Next?
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Go deeper
+
+- **TLS / mTLS** — secure your gRPC channels
+- **Interceptors** — middleware for auth, logging, tracing
+- **gRPC-Web** — use gRPC from browsers
+- **OpenTelemetry** — distributed tracing
+- **Server reflection** — dynamic service discovery (grpcurl)
+
+</div>
+<div>
+
+### Resources
+
+- `grpc.io/docs` — official docs
+- `github.com/grpc/grpc` — gRPC repo
+- `buf.build` — modern proto toolchain
+- `github.com/fullstorydev/grpcurl` — curl for gRPC
+- Workshop repo: `github.com/kamilkulig/grpc-101`
+
+</div>
+</div>
 
 ---
 layout: center
 class: text-center
 ---
 
-# Learn More
+# Q & A
 
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
+<div class="text-6xl mt-8">🙋</div>
 
-<PoweredBySlidev mt-10 />
+<div class="mt-8 text-gray-400">
+Workshop code: <strong>github.com/kamilkulig/grpc-101</strong>
+</div>
+
+<div class="mt-4 text-gray-400">
+Kamil Kulig · Adam Gorgon
+</div>
+
+<!--
+Thank you! Any questions? Feel free to keep working on exercises — we'll be around for the rest of the workshop.
+-->

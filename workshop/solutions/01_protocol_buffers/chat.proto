@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+  rpc GetHistory (HistoryRequest) returns (stream Message);
+  rpc SendBulkMessages (stream MessageRequest) returns (BulkResponse);
+  rpc Chat (stream MessageRequest) returns (stream Message);
+}
+
+message MessageRequest {
+  string room_id  = 1;
+  string user     = 2;
+  string content  = 3;
+}
+
+message MessageResponse {
+  string message_id = 1;
+  string status     = 2;
+  int64  timestamp  = 3;
+}
+
+message HistoryRequest {
+  string room_id = 1;
+  int32  limit   = 2;
+}
+
+message BulkResponse {
+  int32 messages_sent   = 1;
+  int32 messages_failed = 2;
+}
+
+message Message {
+  string message_id = 1;
+  string room_id    = 2;
+  string user       = 3;
+  string content    = 4;
+  int64  timestamp  = 5;
+}
