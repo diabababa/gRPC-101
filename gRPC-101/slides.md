@@ -15,6 +15,7 @@ highlighter: shiki
 lineNumbers: true
 ---
 
+
 # gRPC for Beginners
 
 Build a real-time chat service with Python
@@ -60,6 +61,12 @@ hideInToc: true
 hideInToc: true
 ---
 
+# QR Code for repository
+
+----
+hideInToc: true
+----
+
 # What We'll Build Today
 
 <div class="grid grid-cols-2 gap-8 mt-6">
@@ -73,6 +80,8 @@ A real-time messaging service demonstrating **all 4 gRPC patterns**:
 - `GetHistory` — server streaming
 - `SendBulkMessages` — client streaming
 - `Chat` — bidirectional streaming
+
+> Disable your AI assistant — you'll learn more by writing the code yourself
 
 </div>
 <div>
@@ -94,10 +103,10 @@ A real-time messaging service demonstrating **all 4 gRPC patterns**:
 hideInToc: true
 ---
 
-# Agenda
 
-<Toc />
+<Toc columns="3"/>
 
+<!-- maybe add background agenda word -->
 ---
 transition: fade-out
 ---
@@ -115,24 +124,14 @@ Client                          Server
   |                               |
 ```
 
-<v-click>
+<v-clicks>
 
-### The problem with older RPC approaches
+- **Contract first** — define the interface before writing any code
+- **Serialization is hidden** — framework converts objects to bytes and back
+- **Transport is hidden** — you call a function; the network hop is invisible
+- **Strongly typed** — both sides agree on types at compile time, not at runtime
 
-- CORBA, DCOM, SOAP — complex, brittle, hard to version
-- Tied to specific languages or platforms
-
-</v-click>
-
-<v-click>
-
-### gRPC solves this with
-
-- **Protocol Buffers** — language-neutral, compact serialization
-- **HTTP/2** — multiplexing, streaming, header compression
-- **Code generation** — client/server stubs in 10+ languages
-
-</v-click>
+</v-clicks>
 
 ---
 
@@ -164,21 +163,40 @@ Client                          Server
 
 ### Why gRPC?
 
-- **10x smaller** payloads than JSON
-- **3x faster** serialization
-- **Streaming** built-in (4 patterns)
+- **Binary format, no field names on the wire**
+  
+  <small class="text-gray-400">significantly smaller and faster than JSON</small>
+- **4 communication patterns** — from simple request/response to full-duplex streaming
 - **Strongly typed** contract
 - **Auto-generated** clients in 10+ languages
 - **Deadlines & cancellation** built in
+  
+  <small class="text-gray-400">Client sets a timeout; server auto-stops when deadline passes or client disconnects</small>
 
 </div>
 </div>
+
+<!--
+10x / 3x — these are typical figures from Google's own benchmarks and community benchmarks
+(e.g. github.com/thekvs/cpp-serializers). The actual gain depends on message structure:
+flat, numeric-heavy messages compress more than deeply nested string-heavy ones.
+Tell participants: "treat these as order-of-magnitude, benchmark your own workload."
+
+Deadlines & cancellation:
+- REST: if the client disconnects, the server keeps running (no built-in signal).
+- gRPC: the client can attach a deadline (e.g. 500 ms). If the server hasn't finished
+  by then, the call is cancelled on both sides automatically. context.is_active()
+  returns False so you can stop early and free resources.
+  This matters a lot for streaming — you don't leak open streams when clients drop.
+-->
 
 ---
 
 # gRPC vs REST
 
-| Feature | REST / HTTP | gRPC |
+<div class="overflow-auto max-h-100">
+
+| Aspect | REST / HTTP | gRPC |
 |---------|------------|------|
 | Protocol | HTTP/1.1 | HTTP/2 |
 | Format | JSON (text) | Protocol Buffers (binary) |
@@ -188,6 +206,8 @@ Client                          Server
 | Browser support | Native | Needs grpc-web proxy |
 | Human readable | ✅ Yes | ❌ Binary |
 | Performance | Good | Excellent |
+
+</div>
 
 ---
 
@@ -202,7 +222,7 @@ Client                          Server
 - Real-time bidirectional streaming (chat, IoT, gaming)
 - Polyglot environments (Python + Go + Java)
 - High-throughput, low-latency APIs
-- Mobile clients (efficient bandwidth)
+- Bandwidth-constrained clients — binary payloads use less data than JSON, matters on weak or metered connections (mobile data, IoT in the field, connected cars)
 
 </div>
 <div>
@@ -246,7 +266,7 @@ message MessageRequest {
 
 - Field numbers (1, 2, 3…) identify fields in binary — **never change them**
 - Types: `string`, `int32`, `int64`, `bool`, `float`, `double`, `bytes`
-- Collections: `repeated string tags = 4;`
+- Collections: `repeated string tags = 4;`. Without `repeated`, a variable can have only one value
 - Optional fields (proto3): all fields are optional by default
 
 </v-clicks>
@@ -254,7 +274,7 @@ message MessageRequest {
 ---
 
 # Proto Data Types Cheat Sheet
-
+<div class="overflow-auto max-h-100">
 ```proto
 message Example {
   // Strings & bytes
@@ -283,6 +303,7 @@ enum Status {
   BANNED  = 2;
 }
 ```
+</div>
 
 ---
 
@@ -319,29 +340,31 @@ service ChatService {
 # Code Generation
 
 ```bash
-# Install tools
-uv add grpcio grpcio-tools
-
-# Generate Python stubs from .proto
 python -m grpc_tools.protoc \
-  -I protos \
-  --python_out=chat/generated \
-  --grpc_python_out=chat/generated \
+  -I protos \                        # where to look for .proto imports `-I` can be repeated — useful when `.proto` files import from each other
+  --python_out=chat/generated \      # message classes  → chat_pb2.py
+  --grpc_python_out=chat/generated \ # service stubs    → chat_pb2_grpc.py
+  --pyi_out=chat/generated \         # type hints       → chat_pb2.pyi - `--pyi_out` generates `.pyi` stubs — autocomplete + mypy/pyright type checking
   protos/chat.proto
-```
 
-This produces:
-- `chat_pb2.py` — message classes (MessageRequest, MessageResponse…)
-- `chat_pb2_grpc.py` — service stubs (ChatServiceStub, ChatServiceServicer…)
-
-<v-click>
-
-```bash
 # Or just use the poe task we prepared:
 poe generate
 ```
+<v-clicks>
 
-</v-click>
+
+
+This produces:
+
+- `chat_pb2.py` — message classes (MessageRequest, MessageResponse…)
+- `chat_pb2_grpc.py` — service stubs (ChatServiceStub, ChatServiceServicer…)
+
+**Deterministic** — same `.proto` always produces identical output; CI can verify nobody edited generated files by hand
+ 
+Keep generated files in a separate dir (`generated/`) and add to `.gitignore`
+
+</v-clicks>
+
 
 ---
 
@@ -421,6 +444,8 @@ poe locust     # start Locust UI
 
 # The Server — Implementing ChatServicer
 
+<div class="overflow-auto max-h-100">
+
 ```python {all|1-3|6-10|12-20|22-27}
 import grpc
 from concurrent import futures
@@ -449,6 +474,8 @@ def serve(port: int = 50051):
     server.start()
     server.wait_for_termination()
 ```
+
+</div>
 
 ---
 
@@ -703,6 +730,9 @@ def stub(grpc_server):
 
 # Writing gRPC Tests
 
+
+<div class="overflow-auto max-h-100">
+
 ```python
 # tests/test_chat.py
 from chat.generated import chat_pb2
@@ -730,6 +760,8 @@ def test_get_history_streams_messages(stub):
     ))
     assert len(messages) == 3
 ```
+
+</div>
 
 ---
 
@@ -969,6 +1001,8 @@ poe locust --headless --users 20 --spawn-time 5 --run-time 30s
 </v-clicks>
 
 ---
+hideInToc: true
+---
 
 # What's Next?
 
@@ -1000,6 +1034,7 @@ poe locust --headless --users 20 --spawn-time 5 --run-time 30s
 ---
 layout: center
 class: text-center
+hideInToc: true
 ---
 
 # Q & A
