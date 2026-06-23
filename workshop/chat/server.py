@@ -35,51 +35,33 @@ def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
 
 
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
+
     def SendMessage(self, request, context):
-        if not request.content.strip():
-            context.abort(
-                grpc.StatusCode.INVALID_ARGUMENT,
-                "Message content cannot be empty",
-            )
-
-        with REQUEST_LATENCY.labels(method="SendMessage").time():
-            msg = _make_message(request)
-
-        REQUEST_COUNT.labels(method="SendMessage", status="ok").inc()
-        return chat_pb2.MessageResponse(
-            message_id=msg.message_id,
-            status="ok",
-            timestamp=msg.timestamp,
-        )
+        # TODO Exercise 02 — implement unary RPC
+        # 1. Validate request.content is not empty; abort with INVALID_ARGUMENT if so
+        # 2. Call _make_message(request) to save and get a Message
+        # 3. Return MessageResponse(message_id=..., status="ok", timestamp=...)
+        pass
 
     def GetHistory(self, request, context):
-        with REQUEST_LATENCY.labels(method="GetHistory").time():
-            messages = _store.get(request.room_id, [])
-            limit = request.limit if request.limit > 0 else len(messages)
-            for msg in messages[-limit:]:
-                yield msg
-
-        REQUEST_COUNT.labels(method="GetHistory", status="ok").inc()
+        # TODO Exercise 03 — implement server streaming
+        # 1. Look up _store.get(request.room_id, [])
+        # 2. Apply request.limit (0 = all)
+        # 3. yield each Message
+        pass
 
     def SendBulkMessages(self, request_iterator, context):
-        sent = failed = 0
-        with REQUEST_LATENCY.labels(method="SendBulkMessages").time():
-            for request in request_iterator:
-                try:
-                    _make_message(request)
-                    sent += 1
-                except Exception:
-                    failed += 1
-
-        REQUEST_COUNT.labels(method="SendBulkMessages", status="ok").inc()
-        return chat_pb2.BulkResponse(messages_sent=sent, messages_failed=failed)
+        # TODO Exercise 03 — implement client streaming
+        # 1. Iterate request_iterator
+        # 2. Call _make_message for each request
+        # 3. Return BulkResponse(messages_sent=..., messages_failed=...)
+        pass
 
     def Chat(self, request_iterator, context):
-        REQUEST_COUNT.labels(method="Chat", status="ok").inc()
-        with REQUEST_LATENCY.labels(method="Chat").time():
-            for request in request_iterator:
-                if context.is_active():
-                    yield _make_message(request)
+        # TODO Exercise 03 (bonus) — bidirectional streaming
+        # 1. Iterate request_iterator
+        # 2. For each request, save and yield the message back
+        pass
 
 
 def serve(port: int = 50051, metrics_port: int = 8000) -> None:

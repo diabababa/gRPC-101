@@ -1,4 +1,59 @@
 services:
+  # ── Workshop dev environment ─────────────────────────────────────────────
+  # Interactive shell with all tools (poe, pytest, ruff, locust, etc.)
+  # Usage:
+  #   docker compose run --rm workshop bash
+  #   docker compose run --rm workshop poe test-exercises
+  #   docker compose run --rm workshop poe test-solutions
+  workshop:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command:
+      - sh
+      - -c
+      - |
+        python -m grpc_tools.protoc -I protos --python_out=chat/generated --grpc_python_out=chat/generated protos/chat.proto
+        exec bash
+
+  # ── Automated exercise test runner ───────────────────────────────────────
+  # Runs Gherkin tests for all exercises.
+  # Usage:  docker compose run --rm test-exercises
+  test-exercises:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command:
+      - sh
+      - -c
+      - |
+        python -m grpc_tools.protoc -I protos --python_out=chat/generated --grpc_python_out=chat/generated protos/chat.proto
+        pytest tests/step_defs/ -v
+
+  # ── Solution test runner ─────────────────────────────────────────────────
+  # Runs the full reference test suite.
+  # Usage:  docker compose run --rm test-solutions
+  test-solutions:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command:
+      - sh
+      - -c
+      - |
+        python -m grpc_tools.protoc -I protos --python_out=chat/generated --grpc_python_out=chat/generated protos/chat.proto
+        pytest tests/test_chat.py -v
+
+  # ── Production chat server ───────────────────────────────────────────────
   chat-server:
     build: .
     ports:
