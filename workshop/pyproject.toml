@@ -15,21 +15,19 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pytest>=8.2.0",
-    "pytest-bdd>=7.0.0",
     "locust>=2.28.0",
     "ruff>=0.4.0",
     "poethepoet>=0.27.0",
 ]
 
 [tool.poe.tasks]
-generate = "python -m grpc_tools.protoc -I protos --python_out=chat/generated --grpc_python_out=chat/generated protos/chat.proto"
+generate = "python -m grpc_tools.protoc -I chat/protos --python_out=chat/generated --grpc_python_out=chat/generated chat/protos/chat.proto"
 server = "python -m chat.main server"
-test = "pytest tests/ -v"
-test-exercises = "pytest tests/step_defs/ -v"
+test-exercises = "pytest tests/exercises/ -v"
 test-solutions = "pytest tests/solutions/ -v"
 lint = "ruff check ."
 fmt = "ruff format ."
-locust = "locust -f tests/locustfile.py"
+locust = "locust -f exercises/05_performance/locustfile_starter.py"
 
 [tool.poe.tasks.client-send]
 cmd = "python -m chat.main client send"
@@ -43,7 +41,7 @@ target-version = "py312"
 select = ["E", "F", "W", "I"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests/exercises", "tests/solutions"]
 
 [build-system]
 requires = ["hatchling"]

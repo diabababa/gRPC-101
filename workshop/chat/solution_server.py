@@ -1,6 +1,6 @@
 """
-Reference (complete) implementation of ChatServicer.
-Used by poe test-solutions so it always passes regardless of participant progress.
+Complete implementation of ChatServicer — solution for all exercises.
+Used by poe test-solutions so tests always pass regardless of participant progress.
 """
 import time
 import uuid
@@ -24,7 +24,7 @@ def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
     return msg
 
 
-class ReferenceChatServicer(chat_pb2_grpc.ChatServiceServicer):
+class SolutionChatServicer(chat_pb2_grpc.ChatServiceServicer):
     def SendMessage(self, request, context):
         if not request.content.strip():
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, "Message content cannot be empty")

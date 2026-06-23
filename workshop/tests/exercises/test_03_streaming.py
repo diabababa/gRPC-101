@@ -1,0 +1,42 @@
+"""Exercise 03 — Streaming RPCs.
+
+Implement GetHistory, SendBulkMessages and Chat in chat/server.py, then make these pass.
+Run: poe test-exercises
+"""
+import pytest
+
+from chat.generated import chat_pb2
+
+
+def test_get_history_returns_sent_messages(stub):
+    # TODO: send 3 messages to a room using stub.SendMessage
+    # TODO: call stub.GetHistory with HistoryRequest(room_id=..., limit=10)
+    # TODO: assert len(list(history)) == 3
+    pytest.fail("Implement this test")
+
+
+def test_get_history_respects_limit(stub):
+    # TODO: send 5 messages to a room
+    # TODO: call GetHistory with limit=2
+    # TODO: assert you get exactly 2 messages (the last 2)
+    pytest.fail("Implement this test")
+
+
+def test_get_history_empty_room_returns_nothing(stub):
+    # TODO: call GetHistory for a room that has no messages
+    # TODO: assert the result is an empty list
+    pytest.fail("Implement this test")
+
+
+def test_send_bulk_messages_returns_correct_count(stub):
+    # TODO: create a generator yielding 5 MessageRequests
+    # TODO: call stub.SendBulkMessages(generator)
+    # TODO: assert resp.messages_sent == 5 and resp.messages_failed == 0
+    pytest.fail("Implement this test")
+
+
+def test_chat_echoes_messages_back(stub):
+    # TODO: create a generator yielding 3 MessageRequests
+    # TODO: call stub.Chat(generator) and collect replies
+    # TODO: assert you get 3 replies back
+    pytest.fail("Implement this test")
