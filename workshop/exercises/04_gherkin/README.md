@@ -72,4 +72,4 @@ poe test-exercises
 
 ## Solution
 
-`solutions/04_gherkin/chat.feature`
+`tests/features/04_gherkin_solution.feature`
