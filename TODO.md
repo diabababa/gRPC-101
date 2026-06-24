@@ -3,7 +3,7 @@ Must have:
 TODO: maybe whole workshop should be on docker
 TODO: add Gherkin test TDD in grpc? maybe first right test in grtpc after gherking message ? maybe first test then code? czy lepiej by byly testy zrobione ktore sprawdza po cwiczeniu czy jest dobrze moze oba? i np odpalaja poe test-exercise
 TODO: poprawic contnent zadan tak by byly proste 1 pokazanie jak implementowac klas w 2 jak zbudowac service stub, w 3 jak zrobic unary service, w 4 zrobic unary client i sprawdzenie komunikacji service - client
-
+# BRAKUJE STREAMING, Performance tests, monitoring, live example
 # TODO: 5 zadanie ADAM CHECK STREAMING EXAMPLE how it working  
 Good to have
 TODO: expalin Stub
