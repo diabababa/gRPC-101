@@ -1,13 +1,10 @@
-"""
-Complete implementation of ChatServicer — solution for all exercises.
-Used by poe test-solutions so tests always pass regardless of participant progress.
-"""
+"""Complete implementation of ChatServicer — solution for all exercises."""
 import time
 import uuid
 
 import grpc
 
-from chat.generated import chat_pb2, chat_pb2_grpc
+from solutions.generated import chat_pb2, chat_pb2_grpc
 
 _store: dict[str, list[chat_pb2.Message]] = {}
 
@@ -24,7 +21,7 @@ def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
     return msg
 
 
-class SolutionChatServicer(chat_pb2_grpc.ChatServiceServicer):
+class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     def SendMessage(self, request, context):
         if not request.content.strip():
             context.abort(grpc.StatusCode.INVALID_ARGUMENT, "Message content cannot be empty")

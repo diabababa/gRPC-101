@@ -1,5 +1,6 @@
 """Solution tests — Exercise 01: Protocol Buffers."""
-from chat.generated import chat_pb2, chat_pb2_grpc
+
+from solutions.generated import chat_pb2, chat_pb2_grpc
 
 
 def test_message_request_has_correct_fields():

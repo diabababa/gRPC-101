@@ -5,7 +5,7 @@ import time
 import grpc
 from locust import User, between, events, task
 
-from chat.generated import chat_pb2, chat_pb2_grpc
+from solutions.generated import chat_pb2, chat_pb2_grpc
 
 HOST = "localhost:50051"
 

@@ -7,7 +7,7 @@ Run with:
 import pytest
 import grpc
 
-from chat.generated import chat_pb2
+from exercises.generated import chat_pb2
 
 # conftest.py provides `stub` fixture automatically — no import needed.
 

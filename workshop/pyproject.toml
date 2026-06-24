@@ -21,8 +21,7 @@ dev = [
 ]
 
 [tool.poe.tasks]
-generate = "python -m grpc_tools.protoc -I chat/protos --python_out=chat/generated --grpc_python_out=chat/generated chat/protos/chat.proto"
-server = "python -m chat.main server"
+server = "python -m exercises.main server"
 test-exercises = "pytest tests/exercises/ -v"
 test-solutions = "pytest tests/solutions/ -v"
 lint = "ruff check ."
@@ -30,8 +29,20 @@ fmt = "ruff format ."
 locust = "locust -f exercises/05_performance/locustfile_starter.py"
 
 [tool.poe.tasks.client-send]
-cmd = "python -m chat.main client send"
+cmd = "python -m exercises.main client send"
 help = "Send a single message (unary)"
+
+[tool.poe.tasks.generate-exercises]
+sequence = [
+  {cmd = "python -m grpc_tools.protoc -I exercises/01_protocol_buffers --python_out=exercises/generated --grpc_python_out=exercises/generated exercises/01_protocol_buffers/chat.proto"},
+  {cmd = "python -c \"import pathlib; f=pathlib.Path('exercises/generated/chat_pb2_grpc.py'); f.write_text(f.read_text().replace('import chat_pb2 as chat__pb2', 'from . import chat_pb2 as chat__pb2'))\""},
+]
+
+[tool.poe.tasks.generate-solutions]
+sequence = [
+  {cmd = "python -m grpc_tools.protoc -I solutions/01_protocol_buffers --python_out=solutions/generated --grpc_python_out=solutions/generated solutions/01_protocol_buffers/chat.proto"},
+  {cmd = "python -c \"import pathlib; f=pathlib.Path('solutions/generated/chat_pb2_grpc.py'); f.write_text(f.read_text().replace('import chat_pb2 as chat__pb2', 'from . import chat_pb2 as chat__pb2'))\""},
+]
 
 [tool.ruff]
 line-length = 88
@@ -48,4 +59,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["chat"]
+packages = ["exercises", "solutions"]

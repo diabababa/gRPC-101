@@ -5,7 +5,7 @@ import sys
 import grpc
 import typer
 
-from chat.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 app = typer.Typer(help="Chat service client")
 

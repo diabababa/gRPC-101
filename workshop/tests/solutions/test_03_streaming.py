@@ -1,5 +1,5 @@
 """Solution tests — Exercise 03: Streaming RPCs."""
-from chat.generated import chat_pb2
+from solutions.generated import chat_pb2
 
 
 def _send(stub, room="test-room", user="alice", content="Hi!"):

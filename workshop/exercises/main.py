@@ -1,9 +1,9 @@
-"""Entry point — `python -m chat.main`."""
+"""Entry point — `python -m exercises.main`."""
 
 import typer
 
-from chat import client
-from chat.server import serve
+from exercises import client
+from exercises.server import serve
 
 app = typer.Typer(help="gRPC Chat Workshop CLI")
 

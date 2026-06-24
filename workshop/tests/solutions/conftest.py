@@ -1,15 +1,16 @@
-import pytest
-import grpc
 from concurrent import futures
 
-from chat.solution_server import SolutionChatServicer
-from chat.generated import chat_pb2_grpc
+import grpc
+import pytest
+
+from solutions.server import ChatServicer
+from solutions.generated import chat_pb2_grpc
 
 
 @pytest.fixture(scope="session")
 def grpc_addr():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
-    chat_pb2_grpc.add_ChatServiceServicer_to_server(SolutionChatServicer(), server)
+    chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
     port = server.add_insecure_port("[::]:0")
     server.start()
     yield f"localhost:{port}"

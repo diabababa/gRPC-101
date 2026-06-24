@@ -9,7 +9,7 @@ Then run this script:
 
 import grpc
 
-from chat.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 CHANNEL = "localhost:50051"
 

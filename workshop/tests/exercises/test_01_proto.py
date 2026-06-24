@@ -3,9 +3,10 @@
 Verify that the compiled proto schema has the correct message types and fields.
 Run: poe test-exercises
 """
+
 import pytest
 
-from chat.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 
 def test_message_request_has_correct_fields():

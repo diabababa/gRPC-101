@@ -2,8 +2,8 @@ import pytest
 import grpc
 from concurrent import futures
 
-from chat.server import ChatServicer
-from chat.generated import chat_pb2_grpc
+from exercises.server import ChatServicer
+from exercises.generated import chat_pb2_grpc
 
 
 @pytest.fixture(scope="session")

@@ -7,7 +7,7 @@ Run: poe test-exercises
 import pytest
 import grpc
 
-from chat.generated import chat_pb2
+from exercises.generated import chat_pb2
 
 
 # ---------------------------------------------------------------------------

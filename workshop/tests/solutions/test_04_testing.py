@@ -5,7 +5,7 @@ This is the reference solution showing what good pytest tests for the chat servi
 import pytest
 import grpc
 
-from chat.generated import chat_pb2
+from solutions.generated import chat_pb2
 
 
 def _send(stub, room="test-room", user="alice", content="Hi!"):

@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import grpc
 
-from chat.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 
 def test_service_handles_concurrent_requests(grpc_addr):

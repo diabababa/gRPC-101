@@ -7,7 +7,7 @@ from concurrent import futures
 import grpc
 
 # Make sure you ran: poe generate
-from chat.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 # In-memory store: room_id → list of Message objects
 _store: dict[str, list] = {}

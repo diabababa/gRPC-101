@@ -5,7 +5,7 @@ from concurrent import futures
 import grpc
 from prometheus_client import Counter, Histogram, start_http_server
 
-from chat.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 # In-memory message store: room_id → list[Message]
 _store: dict[str, list[chat_pb2.Message]] = {}

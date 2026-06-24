@@ -5,7 +5,7 @@ Run: poe test-exercises
 """
 import pytest
 
-from chat.generated import chat_pb2
+from exercises.generated import chat_pb2
 
 
 def test_get_history_returns_sent_messages(stub):
