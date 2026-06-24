@@ -1,6 +1,7 @@
 """Solution: all four gRPC communication patterns."""
 
 import grpc
+import time
 
 from solutions.generated import chat_pb2, chat_pb2_grpc
 
@@ -41,12 +42,26 @@ def demo_bidirectional(stub):
     print("\n[Bidirectional] Chat:")
     inputs = ["Hi there!", "How does gRPC work?", "Thanks, goodbye!"]
 
-    def requests():
-        for text in inputs:
-            yield chat_pb2.MessageRequest(room_id="bidi", user="alice", content=text)
+    def requests(pause_s=0.3):
+        for index, text in enumerate(inputs, start=1):
+            payload = f"#{index} {text}"
+            print(f"  → [alice] {payload}")
+            yield chat_pb2.MessageRequest(
+                room_id="bidi", user="alice", content=payload
+            )
+            time.sleep(pause_s)
+        print("  → client finished sending (half-close)")
 
-    for reply in stub.Chat(requests()):
-        print(f"  ← [{reply.user}] {reply.content}")
+    start = time.monotonic()
+    try:
+        for reply in stub.Chat(requests(), timeout=5):
+            elapsed = time.monotonic() - start
+            print(
+                f"  ← [{reply.user}] {reply.content} "
+                f"(server_ts={reply.timestamp}, t+{elapsed:.2f}s)"
+            )
+    except grpc.RpcError as error:
+        print(f"  stream finished with {error.code().name}: {error.details()}")
 
 
 def main():

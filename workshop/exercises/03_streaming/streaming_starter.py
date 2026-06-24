@@ -41,29 +41,40 @@ def demo_client_streaming(stub: chat_pb2_grpc.ChatServiceStub) -> None:
     print("\n[Client streaming] SendBulkMessages:")
 
     # TODO: define a generator that yields 5 MessageRequests
+    # hint: use a for loop and chat_pb2.MessageRequest()
     def messages():
-        for i in range(5):
-            yield chat_pb2.MessageRequest(
-                room_id="bulk",
-                user="alice",
-                content=f"bulk message {i}",
-            )
-
+        pass
+        
     # TODO: call stub.SendBulkMessages(messages()) and print the result
 
 
 def demo_bidirectional(stub: chat_pb2_grpc.ChatServiceStub) -> None:
-    """TODO: send 3 messages via Chat and print the echoed responses."""
-    print("\n[Bidirectional] Chat:")
+    """TODO: teach and test bidirectional streaming behavior.
 
+    Phase A (required):
+    - stream 3 requests from `inputs`
+    - prefix each payload with a sequence number (#1, #2, #3)
+    - print each streamed response as it arrives
+
+    Phase B (bonus):
+    - add a tiny delay between yielded requests (simulate live chat)
+    - print when request generator is exhausted (client half-close)
+    - pass timeout to `stub.Chat(..., timeout=...)`
+    - catch `grpc.RpcError` and print code/details
+    """
+    print("\n[Bidirectional] Chat:")
     inputs = ["Hi there!", "How does gRPC work?", "Thanks, goodbye!"]
 
-    # TODO: define a generator for the inputs
+    # TODO: define a generator that yields one MessageRequest per input
+    # hint: use enumerate() to attach a sequence number to each message content
+    # bonus: pause briefly between yields — what changes in the output?
+    # bonus: signal explicitly when the generator is done (client half-close)
     def requests():
-        for text in inputs:
-            yield chat_pb2.MessageRequest(room_id="bidi", user="alice", content=text)
+        pass
 
-    # TODO: call stub.Chat(requests()) and iterate the responses
+    # TODO: call stub.Chat() with the generator and iterate the replies
+    # bonus: pass a timeout — what happens when it expires?
+    # bonus: wrap iteration in try/except grpc.RpcError and inspect the error
 
 
 def main():
