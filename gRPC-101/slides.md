@@ -63,9 +63,10 @@ hideInToc: true
 
 # QR Code for repository
 
-----
+
+--- 
 hideInToc: true
-----
+---
 
 # What We'll Build Today
 
