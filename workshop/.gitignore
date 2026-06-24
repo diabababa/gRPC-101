@@ -4,6 +4,7 @@ __pycache__/
 *.pyo
 .pytest_cache/
 chat/generated/*
+exercises/generated/*
 !chat/generated/.gitkeep
 uv.lock
 *.egg-info/

@@ -5,8 +5,25 @@ Run: poe test-exercises
 """
 
 import pytest
+# from exercises.generated import chat_pb2, chat_pb2_grpc
 
-from exercises.generated import chat_pb2, chat_pb2_grpc
+
+def test_generated_chat_classes():
+    error = ""
+    try:
+        from exercises.generated import chat_pb2
+    except ImportError as e:
+        error = e
+    assert error == ""
+
+
+def test_generated_chat_services_stubs():
+    error = ""
+    try:
+        from exercises.generated import chat_pb2_grpc
+    except ImportError as e:
+        error = e
+    assert error == ""
 
 
 def test_message_request_has_correct_fields():

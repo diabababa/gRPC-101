@@ -3,7 +3,6 @@
 import grpc
 import warnings
 
-from . import chat_pb2 as chat__pb2
 
 GRPC_GENERATED_VERSION = '1.81.1'
 GRPC_VERSION = grpc.__version__
@@ -26,7 +25,13 @@ if _version_not_supported:
 
 
 class ChatServiceStub:
-    """Missing associated documentation comment in .proto file."""
+    """TODO: Define the ChatService with four RPC methods:
+    1. SendMessage   — unary
+    2. GetHistory    — server streaming
+    3. SendBulkMessages — client streaming
+    4. Chat          — bidirectional streaming
+    TODO: add rpc methods here
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -34,78 +39,20 @@ class ChatServiceStub:
         Args:
             channel: A grpc.Channel.
         """
-        self.SendMessage = channel.unary_unary(
-                '/chat.ChatService/SendMessage',
-                request_serializer=chat__pb2.MessageRequest.SerializeToString,
-                response_deserializer=chat__pb2.MessageResponse.FromString,
-                _registered_method=True)
-        self.GetHistory = channel.unary_stream(
-                '/chat.ChatService/GetHistory',
-                request_serializer=chat__pb2.HistoryRequest.SerializeToString,
-                response_deserializer=chat__pb2.Message.FromString,
-                _registered_method=True)
-        self.SendBulkMessages = channel.stream_unary(
-                '/chat.ChatService/SendBulkMessages',
-                request_serializer=chat__pb2.MessageRequest.SerializeToString,
-                response_deserializer=chat__pb2.BulkResponse.FromString,
-                _registered_method=True)
-        self.Chat = channel.stream_stream(
-                '/chat.ChatService/Chat',
-                request_serializer=chat__pb2.MessageRequest.SerializeToString,
-                response_deserializer=chat__pb2.Message.FromString,
-                _registered_method=True)
 
 
 class ChatServiceServicer:
-    """Missing associated documentation comment in .proto file."""
-
-    def SendMessage(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetHistory(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def SendBulkMessages(self, request_iterator, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def Chat(self, request_iterator, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+    """TODO: Define the ChatService with four RPC methods:
+    1. SendMessage   — unary
+    2. GetHistory    — server streaming
+    3. SendBulkMessages — client streaming
+    4. Chat          — bidirectional streaming
+    TODO: add rpc methods here
+    """
 
 
 def add_ChatServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'SendMessage': grpc.unary_unary_rpc_method_handler(
-                    servicer.SendMessage,
-                    request_deserializer=chat__pb2.MessageRequest.FromString,
-                    response_serializer=chat__pb2.MessageResponse.SerializeToString,
-            ),
-            'GetHistory': grpc.unary_stream_rpc_method_handler(
-                    servicer.GetHistory,
-                    request_deserializer=chat__pb2.HistoryRequest.FromString,
-                    response_serializer=chat__pb2.Message.SerializeToString,
-            ),
-            'SendBulkMessages': grpc.stream_unary_rpc_method_handler(
-                    servicer.SendBulkMessages,
-                    request_deserializer=chat__pb2.MessageRequest.FromString,
-                    response_serializer=chat__pb2.BulkResponse.SerializeToString,
-            ),
-            'Chat': grpc.stream_stream_rpc_method_handler(
-                    servicer.Chat,
-                    request_deserializer=chat__pb2.MessageRequest.FromString,
-                    response_serializer=chat__pb2.Message.SerializeToString,
-            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'chat.ChatService', rpc_method_handlers)
@@ -115,112 +62,10 @@ def add_ChatServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class ChatService:
-    """Missing associated documentation comment in .proto file."""
-
-    @staticmethod
-    def SendMessage(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/chat.ChatService/SendMessage',
-            chat__pb2.MessageRequest.SerializeToString,
-            chat__pb2.MessageResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def GetHistory(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_stream(
-            request,
-            target,
-            '/chat.ChatService/GetHistory',
-            chat__pb2.HistoryRequest.SerializeToString,
-            chat__pb2.Message.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def SendBulkMessages(request_iterator,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.stream_unary(
-            request_iterator,
-            target,
-            '/chat.ChatService/SendBulkMessages',
-            chat__pb2.MessageRequest.SerializeToString,
-            chat__pb2.BulkResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def Chat(request_iterator,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.stream_stream(
-            request_iterator,
-            target,
-            '/chat.ChatService/Chat',
-            chat__pb2.MessageRequest.SerializeToString,
-            chat__pb2.Message.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
+    """TODO: Define the ChatService with four RPC methods:
+    1. SendMessage   — unary
+    2. GetHistory    — server streaming
+    3. SendBulkMessages — client streaming
+    4. Chat          — bidirectional streaming
+    TODO: add rpc methods here
+    """

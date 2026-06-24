@@ -13,7 +13,7 @@ _store: dict[str, list] = {}
 
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     def SendMessage(self, request, context):
-        if not request.content.strip():
+        if request.content == "":
             context.abort(
                 grpc.StatusCode.INVALID_ARGUMENT,
                 "Message content cannot be empty",

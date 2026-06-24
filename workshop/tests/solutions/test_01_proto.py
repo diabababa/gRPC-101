@@ -3,6 +3,24 @@
 from solutions.generated import chat_pb2, chat_pb2_grpc
 
 
+def test_generated_chat_classes():
+    error = ""
+    try:
+        from solutions.generated import chat_pb2
+    except ImportError as e:
+        error = e
+    assert error == ""
+
+
+def test_generated_chat_services_stubs():
+    error = ""
+    try:
+        from solutions.generated import chat_pb2_grpc
+    except ImportError as e:
+        error = e
+    assert error == ""
+
+
 def test_message_request_has_correct_fields():
     msg = chat_pb2.MessageRequest(room_id="r", user="u", content="c")
     assert msg.room_id == "r"

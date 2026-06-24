@@ -2,39 +2,42 @@ syntax = "proto3";
 
 package chat;
 
+// TODO: Define the ChatService with four RPC methods:
+//   1. SendMessage   — unary
+//   2. GetHistory    — server streaming
+//   3. SendBulkMessages — client streaming
+//   4. Chat          — bidirectional streaming
 service ChatService {
-  rpc SendMessage(MessageRequest) returns (MessageResponse);
-  rpc GetHistory(HistoryRequest) returns (stream Message);
-  rpc SendBulkMessages(stream MessageRequest) returns (BulkResponse);
-  rpc Chat(stream MessageRequest) returns (stream Message);
+  // TODO: add rpc methods here
 }
 
+// TODO: Define MessageRequest
+// Fields: room_id (string), user (string), content (string)
 message MessageRequest {
-  string room_id = 1;
-  string user = 2;
-  string content = 3;
+  // TODO
 }
 
+// TODO: Define MessageResponse
+// Fields: message_id (string), status (string), timestamp (int64)
 message MessageResponse {
-  string message_id = 1;
-  string status = 2;
-  int64 timestamp = 3;
+  // TODO
 }
 
+// TODO: Define HistoryRequest
+// Fields: room_id (string), limit (int32)
 message HistoryRequest {
-  string room_id = 1;
-  int32 limit = 2;
+  // TODO
 }
 
+// TODO: Define BulkResponse
+// Fields: messages_sent (int32), messages_failed (int32)
 message BulkResponse {
-  int32 messages_sent = 1;
-  int32 messages_failed = 2;
+  // TODO
 }
 
+// TODO: Define Message (the stored chat message)
+// Fields: message_id (string), room_id (string), user (string),
+//         content (string), timestamp (int64)
 message Message {
-  string message_id = 1;
-  string room_id = 2;
-  string user = 3;
-  string content = 4;
-  int64 timestamp = 5;
+  // TODO
 }

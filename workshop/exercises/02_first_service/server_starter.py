@@ -16,7 +16,6 @@ _store: dict[str, list] = {}
 # TODO: implement ChatServicer
 # Inherit from chat_pb2_grpc.ChatServiceServicer
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
-
     def SendMessage(self, request, context):
         # TODO: validate request.content is not empty
         #   hint: context.abort(grpc.StatusCode.INVALID_ARGUMENT, "reason")
@@ -42,7 +41,7 @@ def serve(port: int = 50051) -> None:
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     # TODO: register your servicer with the server
-    # hint: chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
+    # hint: chat_pb2_grpc.add_ChatServiceServicer_to_server
 
     server.add_insecure_port(f"[::]:{port}")
     server.start()
