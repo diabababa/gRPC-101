@@ -2,42 +2,53 @@ syntax = "proto3";
 
 package chat;
 
-// TODO: Define the ChatService with four RPC methods:
-//   1. SendMessage   — unary
-//   2. GetHistory    — server streaming
-//   3. SendBulkMessages — client streaming
-//   4. Chat          — bidirectional streaming
+// Service definition — already provided for you.
 service ChatService {
-  // TODO: add rpc methods here
+  rpc SendMessage(MessageRequest) returns (MessageResponse);
+  rpc GetHistory(HistoryRequest) returns (stream Message);
+  rpc SendBulkMessages(stream MessageRequest) returns (BulkResponse);
+  rpc Chat(stream MessageRequest) returns (stream Message);
 }
 
-// TODO: Define MessageRequest
-// Fields: room_id (string), user (string), content (string)
+// EXAMPLE — already filled in. Study the syntax, then define the rest below.
 message MessageRequest {
-  // TODO
+  string room_id = 1;
+  string user = 2;
+  string content = 3;
 }
 
-// TODO: Define MessageResponse
-// Fields: message_id (string), status (string), timestamp (int64)
+// TODO: Define MessageResponse — returned after a successful send.
+// Fields:
+//   message_id (string) — unique ID assigned by the server
+//   status     (string) — "ok" or "error"
+//   timestamp  (int64)  — Unix timestamp
 message MessageResponse {
   // TODO
 }
 
-// TODO: Define HistoryRequest
-// Fields: room_id (string), limit (int32)
+// TODO: Define Message — the stored chat message (returned by GetHistory / Chat).
+// Fields:
+//   message_id (string)
+//   room_id    (string)
+//   user       (string)
+//   content    (string)
+//   timestamp  (int64)
+message Message {
+  // TODO
+}
+
+// TODO: Define HistoryRequest — request history for a room.
+// Fields:
+//   room_id (string)
+//   limit   (int32)  — max messages to return; 0 = all
 message HistoryRequest {
   // TODO
 }
 
-// TODO: Define BulkResponse
-// Fields: messages_sent (int32), messages_failed (int32)
+// TODO: Define BulkResponse — returned after a bulk upload.
+// Fields:
+//   messages_sent   (int32)
+//   messages_failed (int32)
 message BulkResponse {
-  // TODO
-}
-
-// TODO: Define Message (the stored chat message)
-// Fields: message_id (string), room_id (string), user (string),
-//         content (string), timestamp (int64)
-message Message {
   // TODO
 }

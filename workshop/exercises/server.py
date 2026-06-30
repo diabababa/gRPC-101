@@ -35,33 +35,33 @@ def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
 
 
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
+    pass
+    # def SendMessage(self, request, context):
+    #     # TODO Exercise 02 — implement unary RPC
+    #     # 1. Validate request.content is not empty; abort with INVALID_ARGUMENT if so
+    #     # 2. Call _make_message(request) to save and get a Message
+    #     # 3. Return MessageResponse(message_id=..., status="ok", timestamp=...)
+    #     pass
 
-    def SendMessage(self, request, context):
-        # TODO Exercise 02 — implement unary RPC
-        # 1. Validate request.content is not empty; abort with INVALID_ARGUMENT if so
-        # 2. Call _make_message(request) to save and get a Message
-        # 3. Return MessageResponse(message_id=..., status="ok", timestamp=...)
-        pass
+    # def GetHistory(self, request, context):
+    #     # TODO Exercise 03 — implement server streaming
+    #     # 1. Look up _store.get(request.room_id, [])
+    #     # 2. Apply request.limit (0 = all)
+    #     # 3. yield each Message
+    #     pass
 
-    def GetHistory(self, request, context):
-        # TODO Exercise 03 — implement server streaming
-        # 1. Look up _store.get(request.room_id, [])
-        # 2. Apply request.limit (0 = all)
-        # 3. yield each Message
-        pass
+    # def SendBulkMessages(self, request_iterator, context):
+    #     # TODO Exercise 03 — implement client streaming
+    #     # 1. Iterate request_iterator
+    #     # 2. Call _make_message for each request
+    #     # 3. Return BulkResponse(messages_sent=..., messages_failed=...)
+    #     pass
 
-    def SendBulkMessages(self, request_iterator, context):
-        # TODO Exercise 03 — implement client streaming
-        # 1. Iterate request_iterator
-        # 2. Call _make_message for each request
-        # 3. Return BulkResponse(messages_sent=..., messages_failed=...)
-        pass
-
-    def Chat(self, request_iterator, context):
-        # TODO Exercise 03 (bonus) — bidirectional streaming
-        # 1. Iterate request_iterator
-        # 2. For each request, save and yield the message back
-        pass
+    # def Chat(self, request_iterator, context):
+    #     # TODO Exercise 03 (bonus) — bidirectional streaming
+    #     # 1. Iterate request_iterator
+    #     # 2. For each request, save and yield the message back
+    #     pass
 
 
 def serve(port: int = 50051, metrics_port: int = 8000) -> None:

@@ -1,4 +1,4 @@
-"""Solution: unary gRPC server."""
+"""Solution: unary SendMessage implemented."""
 
 import time
 import uuid
@@ -11,28 +11,41 @@ from solutions.generated import chat_pb2, chat_pb2_grpc
 _store: dict[str, list] = {}
 
 
+def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
+    msg = chat_pb2.Message(
+        message_id=str(uuid.uuid4()),
+        room_id=request.room_id,
+        user=request.user,
+        content=request.content,
+        timestamp=int(time.time()),
+    )
+    _store.setdefault(request.room_id, []).append(msg)
+    return msg
+
+
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
+
     def SendMessage(self, request, context):
-        if request.content == "":
+        if not request.content.strip():
             context.abort(
                 grpc.StatusCode.INVALID_ARGUMENT,
                 "Message content cannot be empty",
             )
-        message_id = str(uuid.uuid4())
-        timestamp = int(time.time())
-        msg = chat_pb2.Message(
-            message_id=message_id,
-            room_id=request.room_id,
-            user=request.user,
-            content=request.content,
-            timestamp=timestamp,
-        )
-        _store.setdefault(request.room_id, []).append(msg)
+        msg = _make_message(request)
         return chat_pb2.MessageResponse(
-            message_id=message_id,
+            message_id=msg.message_id,
             status="ok",
-            timestamp=timestamp,
+            timestamp=msg.timestamp,
         )
+
+    def GetHistory(self, request, context):
+        pass
+
+    def SendBulkMessages(self, request_iterator, context):
+        pass
+
+    def Chat(self, request_iterator, context):
+        pass
 
 
 def serve(port: int = 50051) -> None:

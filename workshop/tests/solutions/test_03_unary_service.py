@@ -1,4 +1,4 @@
-"""Solution tests — Exercise 02: First gRPC Service (unary)."""
+"""Solution tests — Exercise 03: Implement Unary SendMessage."""
 import pytest
 import grpc
 

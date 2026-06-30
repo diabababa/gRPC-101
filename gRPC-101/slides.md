@@ -306,35 +306,6 @@ enum Status {
 ```
 </div>
 
----
-
-# Defining a gRPC Service
-
-```proto
-syntax = "proto3";
-
-package chat;
-
-service ChatService {
-  // Unary: one request → one response
-  rpc SendMessage (MessageRequest) returns (MessageResponse);
-
-  // Server streaming: one request → stream of responses
-  rpc GetHistory (HistoryRequest) returns (stream Message);
-
-  // Client streaming: stream of requests → one response
-  rpc SendBulkMessages (stream MessageRequest) returns (BulkResponse);
-
-  // Bidirectional: stream of requests → stream of responses
-  rpc Chat (stream MessageRequest) returns (stream Message);
-}
-```
-
-<v-click>
-
-`stream` keyword = the only difference between the 4 patterns!
-
-</v-click>
 
 ---
 
@@ -369,46 +340,6 @@ Keep generated files in a separate dir (`generated/`) and add to `.gitignore`
 
 ---
 
-# 🛠️ Exercise 1: Protocol Buffers (30 min)
-
-Open `exercises/01_protocol_buffers/README.md`
-
-<div class="grid grid-cols-2 gap-6 mt-4">
-<div>
-
-### Your task
-
-Define the chat service schema in `chat_starter.proto`:
-
-1. Define `MessageRequest` message  
-2. Define `MessageResponse` message  
-3. Define `Message` message  
-4. Define `HistoryRequest` message  
-5. Define `BulkResponse` message  
-6. Define `ChatService` with all 4 RPCs
-
-</div>
-<div>
-
-### Tips
-
-```bash
-# Check your proto syntax
-python -m grpc_tools.protoc \
-  -I exercises/01_protocol_buffers \
-  --python_out=/tmp \
-  --grpc_python_out=/tmp \
-  exercises/01_protocol_buffers/chat_starter.proto
-
-# Solution in:
-solutions/01_protocol_buffers/chat.proto
-```
-
-</div>
-</div>
-
----
-
 # Project Setup
 
 ```bash
@@ -438,6 +369,75 @@ poe lint       # ruff check
 poe fmt        # ruff format
 poe locust     # start Locust UI
 ```
+
+</v-click>
+
+---
+
+# 🛠️ Exercise 1: Proto Messages (15 min)
+
+Open `exercises/01_protocol_buffers/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Your task
+
+`MessageRequest` is filled in as an **example** — study the syntax, then define:
+
+- `MessageResponse` — `message_id`, `status`, `timestamp`
+- `Message` — `message_id`, `room_id`, `user`, `content`, `timestamp`
+- `HistoryRequest` — `room_id`, `limit`
+- `BulkResponse` — `messages_sent`, `messages_failed`
+
+Field numbers start at 1.  
+Types: `string`, `int32`, `int64`
+
+</div>
+<div>
+
+### Verify
+
+```bash
+poe generate-exercises
+# No errors → code generated in exercises/generated/
+```
+
+Peek at `exercises/generated/chat_pb2.py` —  
+each proto message becomes a Python class!
+
+Solution: `solutions/01_protocol_buffers/chat.proto`
+
+</div>
+</div>
+
+---
+
+# Defining a gRPC Service
+
+```proto
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+  // Unary: one request → one response
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+
+  // Server streaming: one request → stream of responses
+  rpc GetHistory (HistoryRequest) returns (stream Message);
+
+  // Client streaming: stream of requests → one response
+  rpc SendBulkMessages (stream MessageRequest) returns (BulkResponse);
+
+  // Bidirectional: stream of requests → stream of responses
+  rpc Chat (stream MessageRequest) returns (stream Message);
+}
+```
+
+<v-click>
+
+`stream` keyword = the only difference between the 4 patterns!
 
 </v-click>
 
@@ -480,6 +480,83 @@ def serve(port: int = 50051):
 
 ---
 
+# 🛠️ Exercise 2: Build a Service Stub (10 min)
+
+Open `exercises/02_service_stub/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Your task
+
+Open `server_starter.py` and:
+
+1. Create `ChatServicer` inheriting from `chat_pb2_grpc.ChatServiceServicer`
+2. Add the four RPC methods — all return `pass` for now:
+   - `SendMessage(self, request, context)`
+   - `GetHistory(self, request, context)`
+   - `SendBulkMessages(self, request_iterator, context)`
+   - `Chat(self, request_iterator, context)`
+3. Register with the server and start it
+
+</div>
+<div>
+
+### Verify
+
+```bash
+python exercises/02_service_stub/server_starter.py
+# Server listening on :50051
+```
+
+The server starts — every call returns an error (no logic yet).  
+That's expected. Logic comes in Exercise 3.
+
+Solution: `solutions/02_service_stub/server.py`
+
+</div>
+</div>
+
+---
+
+# 🛠️ Exercise 3: Implement Unary SendMessage (15 min)
+
+Open `exercises/03_unary_service/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+### Your task
+
+Open `exercises/03_unary_service/server_starter.py` and fill in `SendMessage`:
+
+1. **Validate** — abort with `INVALID_ARGUMENT` if `request.content` is empty
+2. **Save** — call `_make_message(request)` to persist and get a `Message`
+3. **Return** — a `MessageResponse(message_id=..., status="ok", timestamp=...)`
+
+</div>
+<div>
+
+### Test it
+
+```bash
+# Terminal 1
+python exercises/03_unary_service/server_starter.py
+
+# Terminal 2
+poe client-send --room general --user alice "Hello!"
+# ✓ Sent  id=<uuid>  status=ok
+```
+
+Solution: `solutions/03_unary_service/server.py`
+
+</div>
+</div>
+
+
+
+---
+
 # The Client — Stubs and Channels
 
 ```python {all|1-6|8-14|16-22}
@@ -506,40 +583,44 @@ with grpc.insecure_channel("localhost:50051") as channel:
     response = stub.SendMessage(...)
 ```
 
+
 ---
 
-# 🛠️ Exercise 2: First gRPC Service (30 min)
+# 🛠️ Exercise 4: Unary Client + Verify Communication (15 min)
 
-Open `exercises/02_first_service/README.md`
+Open `exercises/04_unary_client/README.md`
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div>
 
-### Task: implement unary `SendMessage`
+### Your task
 
-1. Complete `server_starter.py` — implement `SendMessage` in the servicer
-2. Complete `client_starter.py` — call `SendMessage` and print the result
-3. Start server: `poe server`
-4. Run client: `python exercises/02_first_service/client_starter.py`
+Open `exercises/04_unary_client/client_starter.py` and:
+
+1. Open an `insecure_channel` to `"localhost:50051"`
+2. Create a `ChatServiceStub` from the channel
+3. Call `stub.SendMessage(...)` with a `MessageRequest`
+4. Print `response.message_id` and `response.status`
+5. Catch `grpc.RpcError` and print `e.code()` + `e.details()`
 
 </div>
 <div>
 
-### The typer CLI
+### Verify both sides talk
 
 ```bash
-# Send a message via CLI
-poe client-send \
-  --room general \
-  --user alice \
-  "Hello EuroPython!"
+# Terminal 1 — server from Exercise 3
+python exercises/03_unary_service/server_starter.py
 
-# Or directly
-python -m chat.main client send \
-  --room general \
-  --user alice \
-  "Hello!"
+# Terminal 2 — your client
+python exercises/04_unary_client/client_starter.py
+# message_id: <uuid>
+# status:     ok
 ```
+
+Try an empty message — what error code appears?
+
+Solution: `solutions/04_unary_client/client.py`
 
 </div>
 </div>
@@ -639,9 +720,9 @@ for reply in stub.Chat(user_messages()):
 
 ---
 
-# 🛠️ Exercise 3: Streaming Patterns (20 min)
+# 🛠️ Exercise 5: Streaming Patterns (20 min)
 
-Open `exercises/03_streaming/README.md`
+Open `exercises/05_streaming/README.md`
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div>
@@ -663,11 +744,11 @@ Open `exercises/03_streaming/README.md`
 poe server
 
 # Get history (server streaming)
-python -m chat.main client history \
+python -m exercises.main client history \
   --room general --limit 5
 
 # Bidirectional chat
-python -m chat.main client chat \
+python -m exercises.main client chat \
   --room general --user alice
 ```
 
@@ -766,9 +847,9 @@ def test_get_history_streams_messages(stub):
 
 ---
 
-# 🛠️ Exercise 4: Testing (20 min)
+# 🛠️ Exercise 6: Testing (20 min)
 
-Open `exercises/04_testing/README.md`
+Open `exercises/06_testing/README.md`
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div>
@@ -786,13 +867,13 @@ Open `exercises/04_testing/README.md`
 ### Run tests
 
 ```bash
-poe test
+poe test-exercises
 
 # or verbose
-pytest tests/test_chat.py -v
+pytest tests/exercises/ -v
 
 # run specific test
-pytest tests/test_chat.py::test_send_message -v
+pytest tests/exercises/ -k test_send_message -v
 ```
 
 </div>
@@ -835,14 +916,14 @@ class ChatUser(GrpcUser):
 
 ```bash
 # Start server
-poe server
+poe server-solutions
 
 # Start Locust UI (web interface)
 poe locust
 # Open http://localhost:8089
 
 # Or headless (CLI mode)
-locust -f tests/locustfile.py \
+locust -f solutions/07_performance/locustfile.py \
   --headless \
   --users 50 \
   --spawn-rate 5 \
@@ -861,9 +942,9 @@ locust -f tests/locustfile.py \
 
 ---
 
-# 🛠️ Exercise 5: Performance (20 min)
+# 🛠️ Exercise 7: Performance (20 min)
 
-Open `exercises/05_performance/README.md`
+Open `exercises/07_performance/README.md`
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div>
@@ -954,7 +1035,7 @@ scrape_configs:
 
 ---
 
-# 🛠️ Exercise 6: Monitoring (20 min)
+# 🛠️ Exercise 8: Monitoring (20 min)
 
 ```bash
 # Start everything
@@ -1047,7 +1128,7 @@ Workshop code: <strong>github.com/kamilkulig/grpc-101</strong>
 </div>
 
 <div class="mt-4 text-gray-400">
-Kamil Kulig · Adam Gorgon
+Kamil Kulig · Adam Gorgoń
 </div>
 
 <!--

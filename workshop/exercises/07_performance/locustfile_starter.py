@@ -8,7 +8,23 @@ Run:
 import time
 
 import grpc
+import grpc._channel as _grpc_channel
+import grpc.experimental.gevent as grpc_gevent
 from locust import User, between, events, task
+
+grpc_gevent.init_gevent()
+
+_original_channel_del = _grpc_channel._ChannelCallState.__del__
+
+
+def _safe_channel_del(self):
+    try:
+        _original_channel_del(self)
+    except RuntimeError:
+        pass
+
+
+_grpc_channel._ChannelCallState.__del__ = _safe_channel_del
 
 from exercises.generated import chat_pb2, chat_pb2_grpc
 

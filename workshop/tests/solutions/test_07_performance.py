@@ -1,4 +1,4 @@
-"""Solution tests — Exercise 05: Performance Testing."""
+"""Solution tests — Exercise 07: Performance Testing."""
 import time
 from concurrent.futures import ThreadPoolExecutor
 

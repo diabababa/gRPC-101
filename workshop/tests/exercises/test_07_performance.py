@@ -1,4 +1,4 @@
-"""Exercise 05 — Performance Testing.
+"""Exercise 07 — Performance Testing.
 
 Verify the service handles concurrent load without errors and within latency limits.
 Run: poe test-exercises
@@ -8,7 +8,11 @@ from concurrent.futures import ThreadPoolExecutor
 
 import grpc
 
-from exercises.generated import chat_pb2, chat_pb2_grpc
+pytest.importorskip(
+    "exercises.generated.chat_pb2",
+    reason="Complete Exercise 01 and run: poe generate-exercises",
+)
+from exercises.generated import chat_pb2, chat_pb2_grpc  # noqa: E402
 
 
 def test_service_handles_concurrent_requests(grpc_addr):

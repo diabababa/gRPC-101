@@ -1,13 +1,17 @@
-"""Exercise 04 — Writing Tests (TDD).
+"""Exercise 06 — Writing Tests (TDD).
 
 Write pytest tests from scratch. Tests start RED (server not implemented).
-After you implement chat/server.py, make them GREEN.
+After you implement exercises/server.py, make them GREEN.
 Run: poe test-exercises
 """
-import pytest
 import grpc
+import pytest
 
-from exercises.generated import chat_pb2
+pytest.importorskip(
+    "exercises.generated.chat_pb2",
+    reason="Complete Exercise 01 and run: poe generate-exercises",
+)
+from exercises.generated import chat_pb2  # noqa: E402
 
 
 # ---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-"""Solution tests — Exercise 04: Writing Tests.
+"""Solution tests — Exercise 06: Writing Tests.
 
 This is the reference solution showing what good pytest tests for the chat service look like.
 """

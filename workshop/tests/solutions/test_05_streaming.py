@@ -1,4 +1,4 @@
-"""Solution tests — Exercise 03: Streaming RPCs."""
+"""Solution tests — Exercise 05: Streaming RPCs."""
 from solutions.generated import chat_pb2
 
 

@@ -1,11 +1,15 @@
-"""Exercise 03 — Streaming RPCs.
+"""Exercise 05 — Streaming RPCs.
 
-Implement GetHistory, SendBulkMessages and Chat in chat/server.py, then make these pass.
+Implement GetHistory, SendBulkMessages and Chat in exercises/server.py, then make these pass.
 Run: poe test-exercises
 """
 import pytest
 
-from exercises.generated import chat_pb2
+pytest.importorskip(
+    "exercises.generated.chat_pb2",
+    reason="Complete Exercise 01 and run: poe generate-exercises",
+)
+from exercises.generated import chat_pb2  # noqa: E402
 
 
 def test_get_history_returns_sent_messages(stub):

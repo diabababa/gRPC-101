@@ -3,7 +3,28 @@
 import time
 
 import grpc
+import grpc._channel as _grpc_channel
+import grpc.experimental.gevent as grpc_gevent
 from locust import User, between, events, task
+
+# gRPC uses blocking I/O; patch it to use gevent-compatible sockets
+# so Locust's greenlet event loop doesn't deadlock.
+grpc_gevent.init_gevent()
+
+# Suppress "RuntimeError: greenlet is being finalized" spam on shutdown.
+# gRPC's __del__ tries to close channels after gevent has already torn down
+# the greenlet runtime — the close itself succeeded in on_stop, so this is safe.
+_original_channel_del = _grpc_channel._ChannelCallState.__del__
+
+
+def _safe_channel_del(self):
+    try:
+        _original_channel_del(self)
+    except RuntimeError:
+        pass
+
+
+_grpc_channel._ChannelCallState.__del__ = _safe_channel_del
 
 from solutions.generated import chat_pb2, chat_pb2_grpc
 
