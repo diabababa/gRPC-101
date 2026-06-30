@@ -32,7 +32,9 @@ Chcesz, żebym to zaimplementował? Potrzebny byłby:
 Prosty FastAPI wrapper na istniejący chat service
 Rozszerzony locustfile z RestUser obok GrpcUser
 Nowy task poe do odpalenia obu serwerów jednocześnie
-
+Authentication and Security in gRPC Microservices - Jan Tattermusch, Google
+https://www.youtube.com/watch?v=_y-lzjdVEf0
+# TODO: check security https://www.youtube.com/watch?v=zWmGTMBCBVU
 # monitoring, live example
 # TODO: 5 zadanie ADAM CHECK STREAMING EXAMPLE how it working  
 Good to have
