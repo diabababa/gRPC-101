@@ -266,11 +266,15 @@ Deadlines & cancellation:
 </v-click>
 
 ---
+layout: two-cols
+---
 
 # Protocol Buffers — The Language of gRPC
 
 **Protobuf** is a language-neutral schema language and binary serialization format.
 
+
+  
 ```proto
 syntax = "proto3";
 
@@ -281,96 +285,97 @@ message MessageRequest {
   string user    = 2;
   string content = 3;
 }
+
+message MessageResponse {
+  string message_id = 1;
+  string status = 2;
+  int64 timestamp = 3;
+}
+
+service ChatService {
+  rpc SendMessage (MessageRequest) returns (MessageResponse);
+}
 ```
 
-<v-clicks>
+::right::
 
-- Field numbers (1, 2, 3…) identify fields in binary — **never change them**
-- Types: `string`, `int32`, `int64`, `bool`, `float`, `double`, `bytes`
-- Collections: `repeated string tags = 4;`. Without `repeated`, a variable can have only one value
-- Optional fields (proto3): all fields are optional by default
+<!-- <div class="overflow-auto max-h-100"> -->
 
-</v-clicks>
-
----
-
-# Proto Data Types Cheat Sheet
-
-<div class="overflow-auto max-h-100">
 ```proto
+syntax = "proto3";
+
+package example;
+
+enum Status {
+  UNKNOWN = 0; // proto3: first value MUST be 0
+  ACTIVE = 1;
+  BANNED = 2;
+}
+
 message Example {
-  // Strings & bytes
-  string name     = 1;
-  bytes  data     = 2;
+  string name = 1;
+  bytes data = 2;
 
-  // Numbers
-  int32  count    = 3;
-  int64  size     = 4;
-  float  score    = 5;
-  double precise  = 6;
+  int32 count = 3;
+  int64 size = 4;
+  float score = 5;
+  double precise = 6;
 
-  // Boolean
-  bool   active   = 7;
+  bool active = 7;
 
-  // Repeated (list)
   repeated string tags = 8;
 
-  // Enum
   Status status = 9;
 }
 
-enum Status {
-  UNKNOWN = 0;   // proto3: first value MUST be 0
-  ACTIVE  = 1;
-  BANNED  = 2;
-}
-```
-</div>
 
+```
+
+
+<!-- 
+- Field numbers (1, 2, 3…) identify fields in binary — **never change them**
+- Types: `string`, `int32`, `int64`, `bool`, `float`, `double`, `bytes`
+- Collections: `repeated string tags = 4;`. Without `repeated`, a variable can have only one value
+- Optional fields (proto3): all fields are optional by default 
+-->
+  
 
 ---
 
-# Code Generation
+# Generate Message Classes
 
 ```bash
 python -m grpc_tools.protoc \
   -I protos \                        # where to look for .proto imports `-I` can be repeated — useful when `.proto` files import from each other
   --python_out=chat/generated \      # message classes  → chat_pb2.py
-  --grpc_python_out=chat/generated \ # service stubs    → chat_pb2_grpc.py
   --pyi_out=chat/generated \         # type hints       → chat_pb2.pyi - `--pyi_out` generates `.pyi` stubs — autocomplete + mypy/pyright type checking
   protos/chat.proto
 
 # Or just use the poe task we prepared:
-poe generate
+poe generate-exercises
 ```
 <v-clicks>
 
 
+This produces **deterministic result**: (always produces identical output):
 
-This produces:
+ `chat_pb2.py` — message classes (MessageRequest, MessageResponse…)
 
-- `chat_pb2.py` — message classes (MessageRequest, MessageResponse…)
-- `chat_pb2_grpc.py` — service stubs (ChatServiceStub, ChatServiceServicer…)
-
-**Deterministic** — same `.proto` always produces identical output; CI can verify nobody edited generated files by hand
- 
-Keep generated files in a separate dir (`generated/`) and add to `.gitignore`
+<!-- NOT SURE Keep generated files in a separate dir (`generated/`) and add to `.gitignore` -->
 
 </v-clicks>
 
 
-
-
 ---
 
-# 🛠️ Exercise 1: Proto Messages (15 min)
+# 🛠️ Exercise 1: Proto Messages
 
 Open `exercises/01_protocol_buffers/README.md`
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div>
 
-### Your task
+
 
 `MessageRequest` is filled in as an **example** — study the syntax, then define:
 
@@ -432,6 +437,71 @@ service ChatService {
 
 ---
 
+# Generate Service Stubs
+
+```bash
+python -m grpc_tools.protoc \
+  -I protos \                        # where to look for .proto imports `-I` can be repeated — useful when `.proto` files import from each other
+  --python_out=chat/generated \      # message classes  → chat_pb2.py
+  --grpc_python_out=chat/generated \ # service stubs    → chat_pb2_grpc.py
+  --pyi_out=chat/generated \         # type hints       → chat_pb2.pyi - `--pyi_out` generates `.pyi` stubs — autocomplete + mypy/pyright type checking
+  protos/chat.proto
+
+# Or just use the poe task we prepared:
+poe generate
+```
+<v-clicks>
+
+
+This produces **deterministic result**: (always produces identical output):
+
+- `chat_pb2.py` — message classes (MessageRequest, MessageResponse…)
+- `chat_pb2_grpc.py` — service stubs (ChatServiceStub, ChatServiceServicer…)
+
+</v-clicks>
+
+
+---
+
+# 🛠️ Exercise 2: Build a Service Stub
+
+Open `exercises/02_service_stub/README.md`
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+
+
+Open `server_starter.py` and:
+
+1. Create `ChatServicer` inheriting from `chat_pb2_grpc.ChatServiceServicer`
+2. Add the four RPC methods — all return `pass` for now:
+   - `SendMessage(self, request, context)`
+   - `GetHistory(self, request, context)`
+   - `SendBulkMessages(self, request_iterator, context)`
+   - `Chat(self, request_iterator, context)`
+3. Register with the server and start it
+
+</div>
+<div>
+
+### Verify
+
+```bash
+python exercises/02_service_stub/server_starter.py
+# Server listening on :50051
+```
+
+The server starts — every call returns an error (no logic yet).  
+That's expected. Logic comes in Exercise 3.
+
+Solution: `solutions/02_service_stub/server.py`
+
+</div>
+</div>
+
+---
+
 # The Server — Implementing ChatServicer
 
 <div class="overflow-auto max-h-100">
@@ -469,53 +539,14 @@ def serve(port: int = 50051):
 
 ---
 
-# 🛠️ Exercise 2: Build a Service Stub (10 min)
-
-Open `exercises/02_service_stub/README.md`
-
-<div class="grid grid-cols-2 gap-6 mt-4">
-<div>
-
-### Your task
-
-Open `server_starter.py` and:
-
-1. Create `ChatServicer` inheriting from `chat_pb2_grpc.ChatServiceServicer`
-2. Add the four RPC methods — all return `pass` for now:
-   - `SendMessage(self, request, context)`
-   - `GetHistory(self, request, context)`
-   - `SendBulkMessages(self, request_iterator, context)`
-   - `Chat(self, request_iterator, context)`
-3. Register with the server and start it
-
-</div>
-<div>
-
-### Verify
-
-```bash
-python exercises/02_service_stub/server_starter.py
-# Server listening on :50051
-```
-
-The server starts — every call returns an error (no logic yet).  
-That's expected. Logic comes in Exercise 3.
-
-Solution: `solutions/02_service_stub/server.py`
-
-</div>
-</div>
-
----
-
-# 🛠️ Exercise 3: Implement Unary SendMessage (15 min)
+# 🛠️ Exercise 3: Implement Unary SendMessage
 
 Open `exercises/03_unary_service/README.md`
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div>
 
-### Your task
+
 
 Open `exercises/03_unary_service/server_starter.py` and fill in `SendMessage`:
 
@@ -575,14 +606,15 @@ with grpc.insecure_channel("localhost:50051") as channel:
 
 ---
 
-# 🛠️ Exercise 4: Unary Client + Verify Communication (15 min)
+# 🛠️ Exercise 4: Unary Client + Verify Communication
+
+
 
 Open `exercises/04_unary_client/README.md`
 
 <div class="grid grid-cols-2 gap-6 mt-4">
 <div>
 
-### Your task
 
 Open `exercises/04_unary_client/client_starter.py` and:
 
@@ -591,6 +623,7 @@ Open `exercises/04_unary_client/client_starter.py` and:
 3. Call `stub.SendMessage(...)` with a `MessageRequest`
 4. Print `response.message_id` and `response.status`
 5. Catch `grpc.RpcError` and print `e.code()` + `e.details()`
+
 
 </div>
 <div>
@@ -709,7 +742,7 @@ for reply in stub.Chat(user_messages()):
 
 ---
 
-# 🛠️ Exercise 5: Streaming Patterns (20 min)
+# 🛠️ Exercise 5: Streaming Patterns
 
 Open `exercises/05_streaming/README.md`
 
