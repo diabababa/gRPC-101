@@ -1,6 +1,7 @@
 
 Must have:
 TODO: maybe whole workshop should be on docker
+TODO: add proto to library
 
 
 # TODO: do we delete exercices: testing and perfromance
@@ -20,6 +21,7 @@ class RestUser(HttpUser):  # nowy, ten sam workload przez HTTP/1.1
         self.client.post("/messages", json={...})
 2. Streaming vs polling
 GetHistory jako server streaming vs symulowane odpytywanie REST co 500ms — pokazuje przewagę przy danych real-time.
+
 
 Co byłoby najlepszym demo dla warsztatu?
 Polecam opcję 1 (gRPC vs REST) bo:
@@ -55,3 +57,14 @@ TODO: Automatization go for each exercise and check if it's working
 czym sie rozni poe od makefile? moze przygotrujemy za pomoca czatyu uzycie komendow make makefile
 
 TODO: Automatization go for each exercise and check if it's working
+TODO: add link to slides https://marketplace.visualstudio.com/items?itemName=bufbuild.vscode-buf
+TODO: co to message {google.protobuf.Struct google.protobuf.Timestamp google.protobuf.Empty}
+TODO: co to message Element {reserved 2; reserved "properties"}
+TODO: co to typ oneof, optional
+Message może być w message'u
+option jave_multiple_files
+TODO: co to etcd
+TODO: co to py-grpc-prometheus
+TODO: co to grpcio-health-checking
+TODO: co to protobuf
+TODO: co to
