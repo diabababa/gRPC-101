@@ -4,11 +4,14 @@ WORKDIR /workspace
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Install all deps including dev (pytest, pytest-bdd, locust, ruff, poe)
-COPY pyproject.toml .python-version ./
-RUN uv sync --frozen || uv sync
+# Install dependencies from lock file for reproducible builds.
+# The project source is mounted at runtime, so we only need pyproject + lock here.
+COPY pyproject.toml .python-version uv.lock README.md ./
+RUN uv sync --frozen
 
-# Default: generate protos then drop into shell
-# Override CMD in docker-compose for specific tasks
-ENTRYPOINT ["uv", "run"]
+COPY infrastructure/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Entrypoint auto-generates protobuf stubs then delegates to uv run <cmd>.
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
