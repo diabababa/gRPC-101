@@ -27,15 +27,15 @@ def test_chatservicer_has_send_message():
 
 
 def test_chatservicer_has_get_history():
-    assert callable(getattr(ChatServicer, "GetHistory", None))
+    pytest.fail("Implement this test")
 
 
 def test_chatservicer_has_send_bulk_messages():
-    assert callable(getattr(ChatServicer, "SendBulkMessages", None))
+    pytest.fail("Implement this test")
 
 
 def test_chatservicer_has_chat():
-    assert callable(getattr(ChatServicer, "Chat", None))
+    pytest.fail("Implement this test")
 
 
 def test_chatservicer_can_be_instantiated():

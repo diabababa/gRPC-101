@@ -33,7 +33,6 @@ if fixed != txt:
         fi
     fi
 }
-
 generate "exercises/01_protocol_buffers" "exercises/generated" "chat.proto"
 generate "solutions/01_protocol_buffers" "solutions/generated" "chat.proto"
 
