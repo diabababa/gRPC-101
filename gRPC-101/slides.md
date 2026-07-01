@@ -71,9 +71,13 @@ Workshop code: <strong>github.com/kamilkulig/grpc-101</strong>
 # Clone & enter workshop
 cd workshop
 
-# Create virtualenv and install deps
-uv sync or docker compose up -d
+# run test-exercises
+docker compose run --rm workshop poe test-exercises
 
+# Or create virtualenv and install deps and run
+uv sync
+source .venv/bin/activate
+poe test-exercises
 ```
 
 --- 
