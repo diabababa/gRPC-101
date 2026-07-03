@@ -5,7 +5,7 @@ Run: poe test-exercises
 """
 
 import pytest
-# from exercises.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 
 def test_generated_chat_classes():
@@ -17,19 +17,13 @@ def test_generated_chat_classes():
     assert error == ""
 
 
-def test_generated_chat_services_stubs():
-    error = ""
-    try:
-        from exercises.generated import chat_pb2_grpc
-    except ImportError as e:
-        error = e
-    assert error == ""
-
-
 def test_message_request_has_correct_fields():
+    message = chat_pb2.MessageRequest(room_id="r", user="u", content="c")
+    assert message.room_id == "r"
+    assert message.user == "u"
+    assert message.content == "c"
     # TODO: create a MessageRequest with room_id="r", user="u", content="c"
     # TODO: assert each field has the expected value
-    pytest.fail("Implement this test")
 
 
 def test_message_response_has_correct_fields():
