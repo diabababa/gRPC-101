@@ -18,17 +18,7 @@ hideInToc: true
 
 # gRPC for Beginners
 
-Build a real-time chat service with Python
-
-<div class="text-gray-400 mt-4">EuroPython 2026 · Kraków · 3h Workshop</div>
-
-<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space to start <carbon:arrow-right />
-</div>
-
-<!--
-Welcome everyone! Today you'll build a real chat service using gRPC — from proto definition to load testing. Laptop + Docker = you're ready.
--->
+<div class="mt-4">EuroPython 2026 · Kraków · 3h Workshop</div>
 
 ---
 hideInToc: true
@@ -39,10 +29,13 @@ hideInToc: true
 <div class="grid grid-cols-2 gap-8 mt-8">
 <div class="text-center">
 
+
+## TODO: Add photos
+
 **Kamil Kulig**
 
-💼 Building at CTHINGS.CO  
-🐍 Python lover · 🕺 King of Disco  
+💼 Senior Backend Engineer at CTHINGS.CO  
+🐍 Python lover · 🎾 Padel Connoisseur
 📢 PyCon Poland · PyCon Sweden · Python Warsaw
 
 </div>
@@ -61,11 +54,12 @@ hideInToc: true
 hideInToc: true
 ---
 
-# QR Code for repository
+# Project Setup
 
 ## TODO: add QR code
-Workshop code: <strong>github.com/kamilkulig/grpc-101</strong>
-## Project Setup
+
+clone repository: <strong>github.com/kamilkulig/grpc-101</strong>
+
 
 ```bash
 # Clone & enter workshop
@@ -86,19 +80,25 @@ hideInToc: true
 
 # Tech Stack 🛠️
 
-<!-- # TODO: maybe delete to not shadow real goal: ruff, locust, prometeus grafana -->
+<!-- 
+be delete to not shadow real goal
+- **ruff** — linter & formatter
+- **locust** — load testing
+- **Prometheus + Grafana** — monitoring -->
+
 > Disable your AI assistant — you'll learn more by writing the code yourself
 
 <v-clicks>
 
-- **PyCharm** has build in support for proto files, but VSCode needs plugin https://marketplace.visualstudio.com/items?itemName=bufbuild.vscode-buf
+- **PyCharm** has build in support for proto files, but **VSCode** needs plugin https://marketplace.visualstudio.com/items?itemName=bufbuild.vscode-buf
+
 - **Docker** — infrastructure
+
 - **uv** — fast package manager
+
 - **poe** — task runner
+
 - **pytest** — testing
-- **ruff** — linter & formatter
-- **locust** — load testing
-- **Prometheus + Grafana** — monitoring
 
 </v-clicks>
 
@@ -259,6 +259,7 @@ Deadlines & cancellation:
 - Teams unfamiliar with Protobuf
 - Debugging / human inspection of traffic
 - Simple scripts & one-off tools
+- Developer Experience is crucial 
 
 </div>
 </div>
