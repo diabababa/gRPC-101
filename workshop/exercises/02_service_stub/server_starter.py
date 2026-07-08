@@ -25,7 +25,7 @@ def serve(port: int = 50051) -> None:
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     # TODO: register your servicer
-    # hint: chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
+    # hint: chat_pb2_grpc.add_ChatServiceServicer_to_server(<servicer>, <server>)
 
     server.add_insecure_port(f"[::]:{port}")
     server.start()

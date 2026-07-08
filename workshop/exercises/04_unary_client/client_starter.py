@@ -23,12 +23,10 @@ def main():
             )
 
             # TODO 4: print message_id and status
-            print(f"message_id: {response.message_id}")
-            print(f"status:     {response.status}")
 
         except grpc.RpcError as e:
             # TODO 5: print the error code and details
-            print(f"Error {e.code()}: {e.details()}")
+            pass
 
 
 if __name__ == "__main__":
