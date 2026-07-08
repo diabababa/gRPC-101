@@ -17,6 +17,7 @@ order = (
     "resources",
 )
 order = (
+    "project_setup",
     "workshop_instructor_introduction",
     "grpc_inroduction",
     # "what_is_RPC",
@@ -26,12 +27,12 @@ order = (
     # "why_gRPC",
     # "locust_and_results_compering_to_different_tech",
     # "tools for gRPC",
+    "protobuf",  # Protocol Buffers
+    # "create_proto_messages",
+    # "create_service_stubs",
+    # diff service vs server
     "project_setup",
     # "what_project_are_we_building", !!!
-    "protobuf",  # Protocol Buffers
-    "create_proto_messages",
-    "create_service_stubs",
-    # diff service vs server
     "unary",
     "server_streaming",
     "client_streaming",
@@ -41,8 +42,8 @@ order = (
     # # "implement_service_stub",
     # "create_client",
     # # "how_to_implement_4_patterns_to_clientexercise5_implement_4_patterns_to_client",
-    "error_handling&status_codes",
-    "cancellation&deadlines",
+    "error_handling_and_status_codes",
+    "cancellation_and_deadlines",
     # TODO: add more: next guides https://grpc.io/docs/guides/
     "production",
     # "metadata&interceptors",
@@ -52,7 +53,7 @@ order = (
     # Reflaction
     # Monitoring
     "summary",
-    "go deepER",
+    "go_deepER",
     "resources",
     "Q&A",
 )

@@ -1,21 +1,49 @@
-# gRPC 101 - presented with Slidev
+# workshop_instructor_introduction
 
-Install pnpm if you don't have it:
 
-```bash
-npm install -g pnpm
-```
+# grpc_inroduction
 
-add extension for VS Code: [Slidev for VS Code](https://sli.dev/features/vscode-extension)
 
-To start the slide show:
+# project_setup
 
-- `pnpm install`
-- `pnpm dev`
-- visit <http://localhost:3030>
 
-Edit the [slides.md](./slides.md) to see the changes.
+# protobuf
 
-Learn more about Slidev at the [documentation](https://sli.dev/).
 
-[Slidev](https://github.com/slidevjs/slidev)!
+# create_proto_messages
+
+
+# create_service_stubs
+
+
+# unary
+
+
+# server_streaming
+
+
+# client_streaming
+
+
+# bidirectional_streaming
+
+
+# error_handling_and_status_codes
+
+
+# cancellation_and_deadlines
+
+
+# production
+
+
+# summary
+
+
+# go_deepER
+
+
+# resources
+
+
+# Q&A

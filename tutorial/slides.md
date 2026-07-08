@@ -140,14 +140,6 @@ transition: fade-out
 
 **Remote Procedure Call** — call a function on another machine as if it were local.
 
-```
-Client                          Server
-  |                               |
-  |  sayHello("Alice")  ───────►  |
-  |                               |  execute sayHello()
-  |  ◄───────── "Hello, Alice!"   |
-  |                               |
-```
 
 <v-clicks>
 
@@ -167,7 +159,7 @@ Client                          Server
 <div class="grid grid-cols-2 gap-6 mt-6">
 <div>
 
-### Core components
+### gRPC architecture
 
 ```
 ┌─────────────────────┐
@@ -453,7 +445,7 @@ python -m grpc_tools.protoc \
   protos/chat.proto
 
 # Or just use the poe task we prepared:
-poe generate
+# poe generate
 ```
 <v-clicks>
 
@@ -656,6 +648,51 @@ Solution: `solutions/04_unary_client/client.py`
 
 # Communication Patterns
 
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request
+    Server-->>Client: Response
+```
+
+# server_streaming
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request
+    Server-->>Client: Response 1
+    Server-->>Client: Response 2
+    Server-->>Client: Response 3
+```
+
+# client_streaming
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request 1
+    Client->>Server: Request 2
+    Client->>Server: Request 3
+    Server-->>Client: Response
+```
+
+# bidirectional_streaming
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request 1
+    Server-->>Client: Response 1
+    Client->>Server: Request 2
+    Server-->>Client: Response 2
+    Client->>Server: Request 3
+    Server-->>Client: Response 3
+```
 <div class="grid grid-cols-2 gap-4 mt-4">
 
 <div>
