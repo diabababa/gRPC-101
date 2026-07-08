@@ -1,23 +1,81 @@
 services:
-  chat-server:
-    build: .
+  # ── Dev shell ────────────────────────────────────────────────────────────────
+  # Interactive environment with all tools (poe, pytest, ruff, locust).
+  # Your local files are mounted, so edits are reflected instantly.
+  #
+  # Quick-start:
+  #   docker compose run --rm workshop bash          # open a shell
+  #   docker compose run --rm workshop poe test-exercises
+  #   docker compose run --rm workshop poe test-solutions
+  #   docker compose run --rm workshop poe lint
+  workshop:
+    build:
+      context: .
+      dockerfile: infrastructure/Dockerfile.dev
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+
+  # ── Solutions server ─────────────────────────────────────────────────────────
+  # Runs the reference (solutions) gRPC server.
+  # Used as a target for performance testing (exercise 07) and manual exploration.
+  #
+  #   docker compose up server
+  #   docker compose run --rm workshop poe locust-solutions
+  server:
+    build:
+      context: .
+      dockerfile: infrastructure/Dockerfile.dev
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: ["poe", "server-solutions"]
     ports:
       - "50051:50051"   # gRPC
       - "8000:8000"     # Prometheus metrics
     healthcheck:
-      test: ["CMD", "python", "-c", "import grpc; ch=grpc.insecure_channel('localhost:50051'); ch.close()"]
+      test: ["CMD", "python", "-c",
+             "import grpc; ch=grpc.insecure_channel('localhost:50051'); ch.close()"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 10
 
+  # ── Locust load generator ────────────────────────────────────────────────────
+  # Web UI for performance testing (exercise 07).
+  #
+  #   docker compose up server locust
+  #   open http://localhost:8089
+  locust:
+    build:
+      context: .
+      dockerfile: infrastructure/Dockerfile.dev
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: ["poe", "locust-solutions", "--host", "grpc://server:50051",
+              "--web-host", "0.0.0.0"]
+    ports:
+      - "8089:8089"
+    depends_on:
+      server:
+        condition: service_healthy
+
+  # ── Monitoring stack ─────────────────────────────────────────────────────────
+  # Prometheus + Grafana for the observability exercise.
+  #
+  #   docker compose up server prometheus grafana
+  #   open http://localhost:3000  (admin / admin)
   prometheus:
     image: prom/prometheus:v2.52.0
     ports:
       - "9090:9090"
     volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:
-      - chat-server
+      server:
+        condition: service_healthy
 
   grafana:
     image: grafana/grafana:11.0.0
@@ -28,7 +86,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
     volumes:
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./infrastructure/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infrastructure/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       - prometheus

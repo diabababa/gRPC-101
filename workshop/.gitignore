@@ -3,8 +3,7 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
-chat/generated/*
-!chat/generated/.gitkeep
+exercises/generated/*
 uv.lock
 *.egg-info/
 dist/

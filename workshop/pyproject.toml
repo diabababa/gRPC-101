@@ -5,32 +5,45 @@ description = "gRPC Chat Service — EuroPython 2026 Workshop"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "grpcio>=1.64.0",
-    "grpcio-tools>=1.64.0",
-    "grpcio-reflection>=1.64.0",
-    "prometheus-client>=0.20.0",
-    "typer>=0.12.0",
+  "grpcio>=1.64.0",
+  "grpcio-tools>=1.64.0",
+  "grpcio-reflection>=1.64.0",
+  "prometheus-client>=0.20.0",
+  "typer>=0.12.0",
 ]
 
 [dependency-groups]
-dev = [
-    "pytest>=8.2.0",
-    "locust>=2.28.0",
-    "ruff>=0.4.0",
-    "poethepoet>=0.27.0",
-]
+dev = ["pytest>=8.2.0", "locust>=2.28.0", "ruff>=0.4.0", "poethepoet>=0.27.0"]
 
 [tool.poe.tasks]
-generate = "python -m grpc_tools.protoc -I protos --python_out=chat/generated --grpc_python_out=chat/generated protos/chat.proto"
-server = "python -m chat.main server"
-test = "pytest tests/ -v"
+server = "python -m exercises.main server"
+server-solutions = "python -m solutions.main server"
+test-exercises = { shell = "poe generate-exercises && trap 'rm -rf exercises/generated/*_pb2*.py exercises/generated/__pycache__' EXIT && pytest tests/exercises/ -v" }
+test-solutions = { shell = "poe generate-solutions && trap 'rm -rf solutions/generated/*_pb2*.py solutions/generated/__pycache__' EXIT && pytest tests/solutions/ -v" }
 lint = "ruff check ."
 fmt = "ruff format ."
-locust = "locust -f tests/locustfile.py"
+locust = "locust -f exercises/07_performance/locustfile_starter.py"
+locust-solutions = "locust -f solutions/07_performance/locustfile_starter.py"
 
 [tool.poe.tasks.client-send]
-cmd = "python -m chat.main client send"
+cmd = "python -m exercises.main client send"
 help = "Send a single message (unary)"
+
+[tool.poe.tasks.client-send-solutions]
+cmd = "python -m solutions.main client send"
+help = "Send a single message (unary)"
+
+[tool.poe.tasks.generate-exercises]
+sequence = [
+  { cmd = "python -m grpc_tools.protoc -I exercises/01_protocol_buffers --python_out=exercises/generated --grpc_python_out=exercises/generated exercises/01_protocol_buffers/chat.proto" },
+  { cmd = "python -c \"import pathlib; f=pathlib.Path('exercises/generated/chat_pb2_grpc.py'); f.write_text(f.read_text().replace('import chat_pb2 as chat__pb2', 'from . import chat_pb2 as chat__pb2'))\"" },
+]
+
+[tool.poe.tasks.generate-solutions]
+sequence = [
+  { cmd = "python -m grpc_tools.protoc -I solutions/01_protocol_buffers --python_out=solutions/generated --grpc_python_out=solutions/generated solutions/01_protocol_buffers/chat.proto" },
+  { cmd = "python -c \"import pathlib; f=pathlib.Path('solutions/generated/chat_pb2_grpc.py'); f.write_text(f.read_text().replace('import chat_pb2 as chat__pb2', 'from . import chat_pb2 as chat__pb2'))\"" },
+]
 
 [tool.ruff]
 line-length = 88
@@ -40,11 +53,11 @@ target-version = "py312"
 select = ["E", "F", "W", "I"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests/exercises", "tests/solutions"]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["chat"]
+packages = ["exercises", "solutions"]
