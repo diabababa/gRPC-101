@@ -1,6 +1,6 @@
 services:
   # ── Dev shell ────────────────────────────────────────────────────────────────
-  # Interactive environment with all tools (poe, pytest, ruff, locust).
+  # Interactive environment with all tools (poe, pytest, ruff).
   # Your local files are mounted, so edits are reflected instantly.
   #
   # Quick-start:
@@ -20,10 +20,9 @@ services:
 
   # ── Solutions server ─────────────────────────────────────────────────────────
   # Runs the reference (solutions) gRPC server.
-  # Used as a target for performance testing (exercise 07) and manual exploration.
+  # Used for manual exploration and smoke-testing the CLI.
   #
   #   docker compose up server
-  #   docker compose run --rm workshop poe locust-solutions
   server:
     build:
       context: .
@@ -41,26 +40,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
-
-  # ── Locust load generator ────────────────────────────────────────────────────
-  # Web UI for performance testing (exercise 07).
-  #
-  #   docker compose up server locust
-  #   open http://localhost:8089
-  locust:
-    build:
-      context: .
-      dockerfile: infrastructure/Dockerfile.dev
-    volumes:
-      - .:/workspace
-    working_dir: /workspace
-    command: ["poe", "locust-solutions", "--host", "grpc://server:50051",
-              "--web-host", "0.0.0.0"]
-    ports:
-      - "8089:8089"
-    depends_on:
-      server:
-        condition: service_healthy
 
   # ── Monitoring stack ─────────────────────────────────────────────────────────
   # Prometheus + Grafana for the observability exercise.

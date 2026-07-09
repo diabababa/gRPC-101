@@ -41,13 +41,15 @@ python -m exercises.main client chat --room general --user alice
 ## Available poe tasks
 
 | Task | Description |
-|------|-------------|
-| `poe generate` | Generate Python stubs from `protos/chat.proto` |
-| `poe server` | Start gRPC server on port 50051 |
-| `poe test` | Run pytest test suite |
+|------|--------------|
+| `poe generate-exercises` | Compile `exercises/01_protocol_buffers/chat.proto` → `exercises/generated/` |
+| `poe generate-solutions` | Compile `solutions/01_protocol_buffers/chat.proto` → `solutions/generated/` |
+| `poe server` | Start gRPC server on port 50051 (exercises) |
+| `poe server-solutions` | Start gRPC server on port 50051 (solutions) |
+| `poe test-exercises` | Generate + run pytest for exercises |
+| `poe test-solutions` | Generate + run pytest for solutions |
 | `poe lint` | Ruff linter |
 | `poe fmt` | Ruff formatter |
-| `poe locust` | Start Locust UI at http://localhost:8089 |
 
 ---
 
@@ -62,31 +64,30 @@ python -m exercises.main client chat --room general --user alice
 | 5 | Streaming Patterns | 20 min | `exercises/05_streaming/` |
 | 6 | Monitoring (Prometheus + Grafana) | 20 min | `docker-compose.yml` |
 
-> Testing (pytest) and performance (Locust) modules are being migrated to
-> this exercise numbering and aren't available yet.
-
 ---
 
 ## Project structure
 
 ```
 workshop/
-├── protos/
-│   └── chat.proto              ← proto schema (source of truth)
-├── chat/
-│   ├── server.py               ← gRPC server implementation
-│   ├── client.py               ← Typer CLI client
-│   ├── main.py                 ← entry point
-│   └── generated/              ← auto-generated (run poe generate)
+├── exercises/
+│   ├── 01_protocol_buffers/    ← Exercise 1: proto schema to complete
+│   ├── 02_service_stub/
+│   ├── 03_unary_service/
+│   ├── 04_unary_client/
+│   ├── 05_streaming/
+│   ├── generated/              ← auto-generated (run poe generate-exercises)
+│   ├── server.py               ← YOUR server — edit this
+│   ├── client.py               ← CLI client
+│   └── main.py                 ← entry point
+├── solutions/                  ← complete reference implementations
 ├── tests/
-│   ├── conftest.py             ← pytest fixtures
-│   ├── test_chat.py            ← integration tests
-│   └── locustfile.py           ← load test
-├── monitoring/
-│   ├── prometheus.yml          ← scrape config
-│   └── grafana/                ← dashboards + provisioning
-├── exercises/                  ← starter files for each exercise
-└── solutions/                  ← complete implementations
+│   ├── exercises/              ← one test file per exercise
+│   └── solutions/              ← solution test suite
+├── infrastructure/
+│   ├── Dockerfile.dev
+│   └── monitoring/             ← Prometheus + Grafana config
+└── docker-compose.yml
 ```
 
 ---
@@ -113,14 +114,14 @@ Open Grafana → Dashboards → **gRPC Chat Service** to see:
 ## Running tests
 
 ```bash
-# Run all tests
-poe test
+# Run exercises test suite (generates stubs first)
+poe test-exercises
 
-# Specific test file
-pytest tests/test_chat.py -v
+# Run solutions test suite
+poe test-solutions
 
-# Specific test
-pytest tests/test_chat.py::test_send_message_returns_id_and_ok_status -v
+# Run a single test file
+poe generate-exercises && pytest tests/exercises/test_03_unary_service.py -v
 ```
 
 ---
