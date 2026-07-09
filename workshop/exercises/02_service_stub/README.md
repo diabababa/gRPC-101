@@ -2,33 +2,36 @@
 
 ## Goal
 
-Create the `ChatServicer` class — the Python object that will handle incoming
-gRPC calls. In this exercise you only need the **structure** (no logic yet).
+Add the `ChatServicer` method stubs — the Python object that will handle
+incoming gRPC calls. In this exercise you only need the **structure** (no
+logic yet).
 
 ## Context
 
 After running `poe generate-exercises`, grpc_tools produced
 `exercises/generated/chat_pb2_grpc.py`. Open it and find
-`ChatServiceServicer` — this is the base class you must inherit from.
+`ChatServiceServicer` — this is the base class `ChatServicer` already
+inherits from in `exercises/server.py`.
 
 ## Your task
 
-Open `server_starter.py` and:
+Open `exercises/server.py` and, inside the `ChatServicer` class, add these
+four methods (all return `pass` for now):
 
-1. Create `ChatServicer` that inherits from `chat_pb2_grpc.ChatServiceServicer`
-2. Add these four methods (all return `pass` for now):
-   - `SendMessage(self, request, context)`
-   - `GetHistory(self, request, context)`
-   - `SendBulkMessages(self, request_iterator, context)`
-   - `Chat(self, request_iterator, context)`
-3. In `serve()`, register your servicer with the server using
-   `chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)`
+- `SendMessage(self, request, context)`
+- `GetHistory(self, request, context)`
+- `SendBulkMessages(self, request_iterator, context)`
+- `Chat(self, request_iterator, context)`
+
+The class already inherits from `chat_pb2_grpc.ChatServiceServicer`, and it's
+already registered with the server in `serve()` — you only need to add the
+method stubs.
 
 ## Run it
 
 ```bash
-python exercises/02_first_service/server_starter.py
-# Should print: Server listening on :50051
+poe server
+# gRPC server listening on :50051
 # Ctrl-C to stop
 ```
 

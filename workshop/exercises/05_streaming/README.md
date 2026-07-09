@@ -1,4 +1,4 @@
-# Exercise 3: Streaming Patterns (20 min)
+# Exercise 5: Streaming Patterns (20 min)
 
 ## Goal
 
@@ -6,13 +6,15 @@ Extend the server with all four communication patterns and test each one from th
 
 ## Prerequisites
 
-Have the reference server running (`poe server`) so you can test the client side independently.
+Have your server running (`poe server`) so you can test the client side
+independently while you iterate on the servicer methods below.
 
 ## Tasks
 
 ### Task 1 — Server streaming: `GetHistory`
 
-In your servicer, implement `GetHistory(self, request, context)`:
+In `exercises/server.py`, inside `ChatServicer`, implement
+`GetHistory(self, request, context)`:
 
 ```python
 def GetHistory(self, request, context):
@@ -69,14 +71,14 @@ def Chat(self, request_iterator, context):
 poe server
 
 # Server streaming — get history
-python -m chat.main client history --room general --limit 5
+python -m exercises.main client history --room general --limit 5
 
 # Bidirectional chat (interactive)
-python -m chat.main client chat --room general --user alice
+python -m exercises.main client chat --room general --user alice
 ```
 
 Open `streaming_starter.py` to write your experiments.
 
 ## Solution
 
-`solutions/03_streaming/streaming.py`
+`solutions/05_streaming/streaming.py`

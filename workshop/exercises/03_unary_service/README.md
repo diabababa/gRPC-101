@@ -14,7 +14,8 @@ out. The servicer method receives:
 
 ## Your task
 
-Open `server_starter.py` and implement `SendMessage`:
+Open `exercises/server.py` and implement `SendMessage` inside the
+`ChatServicer` class:
 
 1. **Validate** — if `request.content` is empty, abort:
    ```python
@@ -35,8 +36,9 @@ Open `server_starter.py` and implement `SendMessage`:
 
 ```bash
 # Terminal 1
-python exercises/03_unary_service/server_starter.py
-# Server listening on :50051
+poe server
+# gRPC server listening on :50051
+# Prometheus metrics at http://localhost:8000/metrics
 
 # Terminal 2 — quick smoke test with the CLI
 poe client-send --room general --user alice "Hello!"

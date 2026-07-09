@@ -1,10 +1,10 @@
-"""Exercise 3 — experiment with all four gRPC streaming patterns.
+"""Exercise 5 — experiment with all four gRPC streaming patterns.
 
-Run the reference server first:
+Run your server first:
     poe server
 
 Then run this script:
-    python exercises/03_streaming/streaming_starter.py
+    python exercises/05_streaming/streaming_starter.py
 """
 
 import grpc

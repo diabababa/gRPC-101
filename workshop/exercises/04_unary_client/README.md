@@ -33,7 +33,7 @@ Open `client_starter.py` and fill in the TODOs:
 
 ```bash
 # Terminal 1 — start the server from Exercise 3
-python exercises/03_unary_service/server_starter.py
+poe server
 
 # Terminal 2 — run your client
 python exercises/04_unary_client/client_starter.py

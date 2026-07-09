@@ -27,13 +27,13 @@ poe generate
 poe server
 
 # 4. In another terminal — send a message
-python -m chat.main client send --room general --user alice "Hello EuroPython!"
+python -m exercises.main client send --room general --user alice "Hello EuroPython!"
 
 # 5. Get history
-python -m chat.main client history --room general
+python -m exercises.main client history --room general
 
 # 6. Interactive chat (bidirectional streaming)
-python -m chat.main client chat --room general --user alice
+python -m exercises.main client chat --room general --user alice
 ```
 
 ---
