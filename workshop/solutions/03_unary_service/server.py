@@ -1,4 +1,4 @@
-"""Solution: unary SendMessage implemented."""
+"""Solution — Exercise 03: SendMessage implemented."""
 
 import time
 import uuid
@@ -6,9 +6,9 @@ from concurrent import futures
 
 import grpc
 
-from solutions.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
-_store: dict[str, list] = {}
+_store: dict[str, list[chat_pb2.Message]] = {}
 
 
 def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
@@ -53,7 +53,7 @@ def serve(port: int = 50051) -> None:
     chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
     server.add_insecure_port(f"[::]:{port}")
     server.start()
-    print(f"Server listening on :{port}")
+    print(f"gRPC server listening on :{port}")
     server.wait_for_termination()
 
 

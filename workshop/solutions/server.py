@@ -7,7 +7,6 @@ import grpc
 from concurrent import futures
 
 from solutions.generated import chat_pb2, chat_pb2_grpc
-from prometheus_client import Counter, Histogram, start_http_server
 
 _store: dict[str, list[chat_pb2.Message]] = {}
 
@@ -57,12 +56,10 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
                 yield _make_message(request)
 
 
-def serve(port: int = 50051, metrics_port: int = 8000) -> None:
-    start_http_server(metrics_port)
+def serve(port: int = 50051) -> None:
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
     server.add_insecure_port(f"[::]:{port}")
     server.start()
     print(f"gRPC server listening on :{port}")
-    print(f"Prometheus metrics at http://localhost:{metrics_port}/metrics")
     server.wait_for_termination()
