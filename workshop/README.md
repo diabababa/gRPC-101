@@ -55,12 +55,15 @@ python -m exercises.main client chat --room general --user alice
 
 | # | Topic | Time | Files |
 |---|-------|------|-------|
-| 1 | Protocol Buffers | 30 min | `exercises/01_protocol_buffers/` |
-| 2 | First gRPC Service | 30 min | `exercises/02_first_service/` |
-| 3 | Streaming Patterns | 20 min | `exercises/03_streaming/` |
-| 4 | Testing with pytest | 20 min | `exercises/04_testing/` |
-| 5 | Performance (Locust) | 20 min | `exercises/05_performance/` |
+| 1 | Protocol Buffers | 15 min | `exercises/01_protocol_buffers/` |
+| 2 | Service Stub | 10 min | `exercises/02_service_stub/` |
+| 3 | Unary Service | 15 min | `exercises/03_unary_service/` |
+| 4 | Unary Client | 15 min | `exercises/04_unary_client/` |
+| 5 | Streaming Patterns | 20 min | `exercises/05_streaming/` |
 | 6 | Monitoring (Prometheus + Grafana) | 20 min | `docker-compose.yml` |
+
+> Testing (pytest) and performance (Locust) modules are being migrated to
+> this exercise numbering and aren't available yet.
 
 ---
 
