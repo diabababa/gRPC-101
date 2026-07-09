@@ -38,7 +38,6 @@ Open `exercises/server.py` and implement `SendMessage` inside the
 # Terminal 1
 poe server
 # gRPC server listening on :50051
-# Prometheus metrics at http://localhost:8000/metrics
 
 # Terminal 2 — quick smoke test with the CLI
 poe client-send --room general --user alice "Hello!"

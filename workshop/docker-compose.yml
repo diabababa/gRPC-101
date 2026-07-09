@@ -33,39 +33,9 @@ services:
     command: ["poe", "server-solutions"]
     ports:
       - "50051:50051"   # gRPC
-      - "8000:8000"     # Prometheus metrics
     healthcheck:
       test: ["CMD", "python", "-c",
              "import grpc; ch=grpc.insecure_channel('localhost:50051'); ch.close()"]
       interval: 5s
       timeout: 3s
       retries: 10
-
-  # ── Monitoring stack ─────────────────────────────────────────────────────────
-  # Prometheus + Grafana for the observability exercise.
-  #
-  #   docker compose up server prometheus grafana
-  #   open http://localhost:3000  (admin / admin)
-  prometheus:
-    image: prom/prometheus:v2.52.0
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./infrastructure/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    depends_on:
-      server:
-        condition: service_healthy
-
-  grafana:
-    image: grafana/grafana:11.0.0
-    ports:
-      - "3000:3000"
-    environment:
-      GF_SECURITY_ADMIN_PASSWORD: admin
-      GF_AUTH_ANONYMOUS_ENABLED: "true"
-      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
-    volumes:
-      - ./infrastructure/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./infrastructure/monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
-    depends_on:
-      - prometheus

@@ -62,7 +62,7 @@ python -m exercises.main client chat --room general --user alice
 | 3 | Unary Service | 15 min | `exercises/03_unary_service/` |
 | 4 | Unary Client | 15 min | `exercises/04_unary_client/` |
 | 5 | Streaming Patterns | 20 min | `exercises/05_streaming/` |
-| 6 | Monitoring (Prometheus + Grafana) | 20 min | `docker-compose.yml` |
+| 6 | Wrap-up & Q&A | 20 min | workshop discussion |
 
 ---
 
@@ -86,28 +86,8 @@ workshop/
 │   └── solutions/              ← solution test suite
 ├── infrastructure/
 │   ├── Dockerfile.dev
-│   └── monitoring/             ← Prometheus + Grafana config
 └── docker-compose.yml
 ```
-
----
-
-## Monitoring stack
-
-```bash
-# Start server + Prometheus + Grafana
-docker compose up -d
-
-# Services:
-# gRPC server   → localhost:50051
-# Prometheus    → localhost:9090
-# Grafana       → localhost:3000  (admin / admin)
-```
-
-Open Grafana → Dashboards → **gRPC Chat Service** to see:
-- Request rate per method
-- Latency p50 / p95 / p99
-- Error rate
 
 ---
 
