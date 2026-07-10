@@ -30,6 +30,22 @@ help = "Send a single message (unary)"
 cmd = "python -m solutions.main client send"
 help = "Send a single message (unary)"
 
+[tool.poe.tasks.client-history]
+cmd = "python -m exercises.main client history"
+help = "Fetch message history (server streaming)"
+
+[tool.poe.tasks.client-chat]
+cmd = "python -m exercises.main client chat"
+help = "Interactive bidirectional chat"
+
+[tool.poe.tasks.starter-04]
+cmd = "python exercises/04_unary_client/client_starter.py"
+help = "Run the Exercise 4 client starter"
+
+[tool.poe.tasks.starter-05]
+cmd = "python exercises/05_streaming/streaming_starter.py"
+help = "Run the Exercise 5 streaming starter"
+
 [tool.poe.tasks.generate-exercises]
 sequence = [
   { cmd = "python -m grpc_tools.protoc -I exercises/01_protocol_buffers --python_out=exercises/generated --grpc_python_out=exercises/generated exercises/01_protocol_buffers/chat.proto" },

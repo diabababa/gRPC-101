@@ -4,7 +4,7 @@ Run your server first:
     poe server
 
 Then run this script:
-    python exercises/05_streaming/streaming_starter.py
+    poe starter-05
 """
 
 import grpc

@@ -13,6 +13,22 @@ After running `poe generate-exercises`, grpc_tools produced
 `ChatServiceServicer` — this is the base class `ChatServicer` already
 inherits from in `exercises/server.py`.
 
+The generated base class defines these exact method signatures:
+
+```python
+def SendMessage(self, request, context):
+	...
+
+def GetHistory(self, request, context):
+	...
+
+def SendBulkMessages(self, request_iterator, context):
+	...
+
+def Chat(self, request_iterator, context):
+	...
+```
+
 ## Your task
 
 Open `exercises/server.py` and, inside the `ChatServicer` class, add these
@@ -37,6 +53,19 @@ poe server
 
 The server starts but returns gRPC errors on every call — that's expected.
 We'll add the real logic in Exercise 3.
+
+## ✅ Micro-check
+
+You should see exactly this line in the terminal:
+
+```
+gRPC server listening on :50051
+```
+
+If the server crashes on import, a method name is probably misspelled — check
+against the signatures in the **Context** section above.
+If it prints `unimplemented` when you call it, the stub is wired correctly —
+that's the expected placeholder response from gRPC.
 
 ## Solution
 
