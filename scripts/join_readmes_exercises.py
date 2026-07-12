@@ -44,22 +44,25 @@ source .venv/bin/activate
 ```
 """
 
-workshop_directory = "/".join(os.getcwd().split("/")[:-1])+"/workshop"
+parent_directory = "/".join(os.getcwd().split("/")[:-1])
+workshop_directory = os.path.join(parent_directory, "workshop")
 exercises_directory = os.path.join(workshop_directory, "exercises")
 solutions_directory = os.path.join(workshop_directory, "solutions")
+target_directory = os.path.join(parent_directory, "tutorial", "exercises")
 new_line = "\n"
-if os.path.exists(f"{exercises_directory}/README.md"):
-    os.remove(f"{exercises_directory}/README.md")
+if os.path.exists(f"{target_directory}/README.md"):
+    os.remove(f"{target_directory}/README.md")
 for index, exercise_chapter in enumerate(order):
     temp_text = ""
     with open(
         os.path.join(f"{exercises_directory}/{exercise_chapter}", "README.md")
     ) as f:
         temp_text = f.read()
-    with open(f"{exercises_directory}/README.md", "a") as f:
+    with open(f"{target_directory}/README.md", "a") as f:
         f.write(f"{new_line * 2 if index > 0 else how_to_prepare}{temp_text}")
     solution_path = os.path.join(f"{exercises_directory}", solutions_order[index]) if index == 6 else os.path.join(f"{solutions_directory}/{exercise_chapter}", solutions_order[index])
     with open(solution_path) as f:
         temp_text = f.read()
-    with open(f"{exercises_directory}/README.md", "a") as f:
+    temp_text = f"```{'python' if index != 0 else 'proto'}{new_line*2}{temp_text}{new_line}```"
+    with open(f"{target_directory}/README.md", "a") as f:
         f.write(f"{new_line * 2}<details>{new_line * 2}<summary>Click to view Solution {index + 1}</summary>{new_line * 2}{temp_text}{new_line * 2}</details>")

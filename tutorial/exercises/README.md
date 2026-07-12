@@ -1,8 +1,7 @@
 
 # How to prepare for the workshop
 
-- Install Python 3.11 or higher
-- Install docker and docker-compose or install uv
+Install docker and docker-compose or install uv
 
 You have three ways to run exercises:
 1. **use docker** 
@@ -78,6 +77,8 @@ If it prints `Expected field name`, a brace or semicolon is wrong.
 
 <summary>Click to view Solution 1</summary>
 
+```proto
+
 syntax = "proto3";
 
 package chat;
@@ -119,6 +120,7 @@ message Message {
   int64 timestamp = 5;
 }
 
+```
 
 </details>
 
@@ -200,6 +202,8 @@ that's the expected placeholder response from gRPC.
 
 <summary>Click to view Solution 2</summary>
 
+```python
+
 """Solution — Exercise 02: ChatServicer with four method stubs."""
 
 import time
@@ -252,6 +256,7 @@ def serve(port: int = 50051) -> None:
 if __name__ == "__main__":
     serve()
 
+```
 
 </details>
 
@@ -364,6 +369,8 @@ still returning `pass` — make sure the method is uncommented in `server.py`.
 
 <summary>Click to view Solution 3</summary>
 
+```python
+
 """Solution — Exercise 03: SendMessage implemented."""
 
 import time
@@ -426,6 +433,7 @@ def serve(port: int = 50051) -> None:
 if __name__ == "__main__":
     serve()
 
+```
 
 </details>
 
@@ -498,6 +506,8 @@ error — add a `print` inside the `except` so you can see what went wrong.
 
 <summary>Click to view Solution 4</summary>
 
+```python
+
 """Solution — Exercise 04: completed unary gRPC client."""
 
 import grpc
@@ -525,6 +535,7 @@ def main():
 if __name__ == "__main__":
     main()
 
+```
 
 </details>
 
@@ -714,6 +725,8 @@ call `_make_message` and `yield` the result.
 
 <summary>Click to view Solution 5</summary>
 
+```python
+
 """Solution — Exercise 05: all four gRPC streaming patterns.
 
 Run your server first:
@@ -809,6 +822,7 @@ def main():
 if __name__ == "__main__":
     main()
 
+```
 
 </details>
 
@@ -891,6 +905,8 @@ If cancellation shows `False`, your call likely finished before `cancel()`.
 <details>
 
 <summary>Click to view Solution 6</summary>
+
+```python
 
 """Solution — Exercise 6: deadlines, cancellation, and error handling.
 
@@ -980,6 +996,7 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+```
 
 </details>
 
@@ -1092,6 +1109,8 @@ If `chat` never prints replies, verify you are iterating `stub.Chat(...)`.
 
 <summary>Click to view Solution 7</summary>
 
+```python
+
 """CLI client for the Chat gRPC service."""
 
 import sys
@@ -1160,5 +1179,6 @@ def chat(
     # 5) handle KeyboardInterrupt/EOFError and grpc CANCELLED cleanly
     raise NotImplementedError("Exercise 07: implement chat()")
 
+```
 
 </details>
