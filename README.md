@@ -23,7 +23,7 @@ poe test-solutions
 
 # gRPC for Beginners
 
-https://github.com/KuligKamil/mongodb-project-workshop/
+[https://github.com/KuligKamil/grpc-workshop/](https://github.com/KuligKamil/grpc-workshop/)
 
 TODO: ADD QR CODE
 
@@ -283,9 +283,6 @@ Request from client: hi
 
 
 </details>
-
-
-# TODO: add screenshots from simple project.
 
 
 <!--

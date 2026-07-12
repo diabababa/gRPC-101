@@ -1,6 +1,6 @@
 # gRPC for Beginners
 
-https://github.com/KuligKamil/mongodb-project-workshop/
+[https://github.com/KuligKamil/grpc-workshop/](https://github.com/KuligKamil/grpc-workshop/)
 
 TODO: ADD QR CODE
 

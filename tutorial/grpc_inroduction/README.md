@@ -235,9 +235,6 @@ Request from client: hi
 </details>
 
 
-# TODO: add screenshots from simple project.
-
-
 <!--
 10x / 3x — these are typical figures from Google's own benchmarks and community benchmarks
 (e.g. github.com/thekvs/cpp-serializers). The actual gain depends on message structure:
