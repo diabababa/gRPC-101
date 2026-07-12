@@ -46,6 +46,10 @@ help = "Run the Exercise 4 client starter"
 cmd = "python exercises/05_streaming/streaming_starter.py"
 help = "Run the Exercise 5 streaming starter"
 
+[tool.poe.tasks.starter-06]
+cmd = "python exercises/06_deadlines_cancellation_errors/deadlines_starter.py"
+help = "Run the Exercise 6 deadlines/cancellation starter"
+
 [tool.poe.tasks.generate-exercises]
 sequence = [
   { cmd = "python -m grpc_tools.protoc -I exercises/01_protocol_buffers --python_out=exercises/generated --grpc_python_out=exercises/generated exercises/01_protocol_buffers/chat.proto" },

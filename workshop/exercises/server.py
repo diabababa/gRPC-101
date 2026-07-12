@@ -29,32 +29,28 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     # Hint: open exercises/generated/chat_pb2_grpc.py and find
     # ChatServiceServicer for the exact method signatures.
 
-    # def SendMessage(self, request, context):
+    # def SendMessage(...):
     #     # TODO Exercise 03 — implement unary RPC
     #     # 1. Validate request.content is not empty; abort with INVALID_ARGUMENT if so
     #     # 2. Call _make_message(request) to save and get a Message
     #     # 3. Return MessageResponse(message_id=..., status="ok", timestamp=...)
-    #     pass
 
-    # def GetHistory(self, request, context):
+    # def GetHistory(...):
     #     # TODO Exercise 05 — implement server streaming
     #     # 1. Look up _store.get(request.room_id, [])
     #     # 2. Apply request.limit (0 = all)
     #     # 3. yield each Message
-    #     pass
 
-    # def SendBulkMessages(self, request_iterator, context):
+    # def SendBulkMessages(...):
     #     # TODO Exercise 05 — implement client streaming
     #     # 1. Iterate request_iterator
     #     # 2. Call _make_message for each request
     #     # 3. Return BulkResponse(messages_sent=..., messages_failed=...)
-    #     pass
 
-    # def Chat(self, request_iterator, context):
+    # def Chat(...):
     #     # TODO Exercise 05 (bonus) — bidirectional streaming
     #     # 1. Iterate request_iterator
     #     # 2. For each request, save and yield the message back
-    #     pass
 
 
 def serve(port: int = 50051) -> None:

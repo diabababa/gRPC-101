@@ -23,17 +23,14 @@ def send(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Send a single message (unary RPC)."""
-    with grpc.insecure_channel(f"{host}:{port}") as channel:
-        stub = chat_pb2_grpc.ChatServiceStub(channel)
-        try:
-            resp = stub.SendMessage(
-                chat_pb2.MessageRequest(room_id=room, user=user, content=message)
-            )
-            typer.echo(f"✓ Sent  id={resp.message_id}  status={resp.status}")
-        except grpc.RpcError as e:
-            typer.echo(f"✗ {e.code()}: {e.details()}", err=True)
-            raise typer.Exit(1)
+    """Exercise 07 — TODO: send a single message (unary RPC)."""
+    # TODO:
+    # 1) open insecure channel
+    # 2) create stub
+    # 3) call SendMessage with MessageRequest(room_id, user, content)
+    # 4) print response.message_id and response.status
+    # 5) handle grpc.RpcError with code/details
+    raise NotImplementedError("Exercise 07: implement send()")
 
 
 @app.command()
@@ -43,17 +40,14 @@ def history(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Fetch message history (server-streaming RPC)."""
-    with grpc.insecure_channel(f"{host}:{port}") as channel:
-        stub = chat_pb2_grpc.ChatServiceStub(channel)
-        try:
-            for msg in stub.GetHistory(
-                chat_pb2.HistoryRequest(room_id=room, limit=limit)
-            ):
-                typer.echo(f"[{msg.user}] {msg.content}")
-        except grpc.RpcError as e:
-            typer.echo(f"✗ {e.code()}: {e.details()}", err=True)
-            raise typer.Exit(1)
+    """Exercise 07 — TODO: fetch message history (server-streaming RPC)."""
+    # TODO:
+    # 1) open insecure channel
+    # 2) create stub
+    # 3) call GetHistory with HistoryRequest(room_id, limit)
+    # 4) iterate stream and print each message
+    # 5) handle grpc.RpcError with code/details
+    raise NotImplementedError("Exercise 07: implement history()")
 
 
 @app.command()
@@ -63,25 +57,11 @@ def chat(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Real-time chat (bidirectional streaming RPC). Type messages, press Enter."""
-
-    def _requests():
-        typer.echo("Connected! Type messages and press Enter. Ctrl-C to quit.")
-        try:
-            while True:
-                line = input(f"{user}> ").strip()
-                if line:
-                    yield chat_pb2.MessageRequest(
-                        room_id=room, user=user, content=line
-                    )
-        except (KeyboardInterrupt, EOFError):
-            return
-
-    with grpc.insecure_channel(f"{host}:{port}") as channel:
-        stub = chat_pb2_grpc.ChatServiceStub(channel)
-        try:
-            for msg in stub.Chat(_requests()):
-                typer.echo(f"  ← [{msg.user}] {msg.content}")
-        except grpc.RpcError as e:
-            if e.code() != grpc.StatusCode.CANCELLED:
-                typer.echo(f"✗ {e.code()}: {e.details()}", err=True)
+    """Exercise 07 — TODO: real-time chat (bidirectional streaming RPC)."""
+    # TODO:
+    # 1) define a request generator reading input lines
+    # 2) yield MessageRequest(room_id, user, content)
+    # 3) open insecure channel and create stub
+    # 4) iterate stub.Chat(generator) and print replies
+    # 5) handle KeyboardInterrupt/EOFError and grpc CANCELLED cleanly
+    raise NotImplementedError("Exercise 07: implement chat()")

@@ -1,7 +1,5 @@
 """CLI client for the Chat gRPC service."""
 
-import sys
-
 import grpc
 import typer
 
@@ -23,16 +21,16 @@ def send(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Send a single message (unary RPC)."""
-    with grpc.insecure_channel(f"{host}:{port}") as channel:
-        stub = chat_pb2_grpc.ChatServiceStub(channel)
+    """Exercise 07 solution: send a single message (unary RPC)."""
+    channel, stub = _stub(host, port)
+    with channel:
         try:
-            resp = stub.SendMessage(
+            response = stub.SendMessage(
                 chat_pb2.MessageRequest(room_id=room, user=user, content=message)
             )
-            typer.echo(f"✓ Sent  id={resp.message_id}  status={resp.status}")
-        except grpc.RpcError as e:
-            typer.echo(f"✗ {e.code()}: {e.details()}", err=True)
+            typer.echo(f"✓ Sent  id={response.message_id}  status={response.status}")
+        except grpc.RpcError as error:
+            typer.echo(f"✗ {error.code()}: {error.details()}", err=True)
             raise typer.Exit(1)
 
 
@@ -43,16 +41,15 @@ def history(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Fetch message history (server-streaming RPC)."""
-    with grpc.insecure_channel(f"{host}:{port}") as channel:
-        stub = chat_pb2_grpc.ChatServiceStub(channel)
+    """Exercise 07 solution: fetch message history (server-streaming RPC)."""
+    channel, stub = _stub(host, port)
+    with channel:
         try:
-            for msg in stub.GetHistory(
-                chat_pb2.HistoryRequest(room_id=room, limit=limit)
-            ):
-                typer.echo(f"[{msg.user}] {msg.content}")
-        except grpc.RpcError as e:
-            typer.echo(f"✗ {e.code()}: {e.details()}", err=True)
+            stream = stub.GetHistory(chat_pb2.HistoryRequest(room_id=room, limit=limit))
+            for message_item in stream:
+                typer.echo(f"[{message_item.user}] {message_item.content}")
+        except grpc.RpcError as error:
+            typer.echo(f"✗ {error.code()}: {error.details()}", err=True)
             raise typer.Exit(1)
 
 
@@ -63,7 +60,7 @@ def chat(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Real-time chat (bidirectional streaming RPC). Type messages, press Enter."""
+    """Exercise 07 solution: real-time bidirectional chat."""
 
     def _requests():
         typer.echo("Connected! Type messages and press Enter. Ctrl-C to quit.")
@@ -75,11 +72,11 @@ def chat(
         except (KeyboardInterrupt, EOFError):
             return
 
-    with grpc.insecure_channel(f"{host}:{port}") as channel:
-        stub = chat_pb2_grpc.ChatServiceStub(channel)
+    channel, stub = _stub(host, port)
+    with channel:
         try:
-            for msg in stub.Chat(_requests()):
-                typer.echo(f"  ← [{msg.user}] {msg.content}")
-        except grpc.RpcError as e:
-            if e.code() != grpc.StatusCode.CANCELLED:
-                typer.echo(f"✗ {e.code()}: {e.details()}", err=True)
+            for message_item in stub.Chat(_requests()):
+                typer.echo(f"  ← [{message_item.user}] {message_item.content}")
+        except grpc.RpcError as error:
+            if error.code() != grpc.StatusCode.CANCELLED:
+                typer.echo(f"✗ {error.code()}: {error.details()}", err=True)
