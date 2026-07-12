@@ -62,7 +62,9 @@ python -m exercises.main client chat --room general --user alice
 | 3 | Unary Service | 15 min | `exercises/03_unary_service/` |
 | 4 | Unary Client | 15 min | `exercises/04_unary_client/` |
 | 5 | Streaming Patterns | 20 min | `exercises/05_streaming/` |
-| 6 | Wrap-up & Q&A | 20 min | workshop discussion |
+| 6 | Deadlines, Cancellation, Errors | 20 min | `exercises/06_deadlines_cancellation_errors/` |
+| 7 | Final Chat Client | 30 min | `exercises/07_final_chat_client/` |
+| 8 | Wrap-up & Q&A | 20 min | workshop discussion |
 
 ---
 
@@ -76,9 +78,11 @@ workshop/
 │   ├── 03_unary_service/
 │   ├── 04_unary_client/
 │   ├── 05_streaming/
+│   ├── 06_deadlines_cancellation_errors/
+│   ├── 07_final_chat_client/
 │   ├── generated/              ← auto-generated (run poe generate-exercises)
 │   ├── server.py               ← YOUR server — edit this
-│   ├── client.py               ← CLI client
+│   ├── client.py               ← YOUR final app client (Exercise 07)
 │   └── main.py                 ← entry point
 ├── solutions/                  ← complete reference implementations
 ├── tests/
