@@ -3,23 +3,11 @@ import uuid
 from concurrent import futures
 
 import grpc
-from prometheus_client import Counter, Histogram, start_http_server
 
 from exercises.generated import chat_pb2, chat_pb2_grpc
 
 # In-memory message store: room_id → list[Message]
 _store: dict[str, list[chat_pb2.Message]] = {}
-
-REQUEST_COUNT = Counter(
-    "grpc_requests_total",
-    "Total gRPC requests",
-    ["method", "status"],
-)
-REQUEST_LATENCY = Histogram(
-    "grpc_request_duration_seconds",
-    "gRPC request duration in seconds",
-    ["method"],
-)
 
 
 def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
@@ -36,40 +24,43 @@ def _make_message(request: chat_pb2.MessageRequest) -> chat_pb2.Message:
 
 class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     pass
+    # TODO Exercise 02 — add the four method stubs below (each returning
+    # `pass` for now): SendMessage, GetHistory, SendBulkMessages, Chat.
+    # Hint: open exercises/generated/chat_pb2_grpc.py and find
+    # ChatServiceServicer for the exact method signatures.
+
     # def SendMessage(self, request, context):
-    #     # TODO Exercise 02 — implement unary RPC
+    #     # TODO Exercise 03 — implement unary RPC
     #     # 1. Validate request.content is not empty; abort with INVALID_ARGUMENT if so
     #     # 2. Call _make_message(request) to save and get a Message
     #     # 3. Return MessageResponse(message_id=..., status="ok", timestamp=...)
     #     pass
 
     # def GetHistory(self, request, context):
-    #     # TODO Exercise 03 — implement server streaming
+    #     # TODO Exercise 05 — implement server streaming
     #     # 1. Look up _store.get(request.room_id, [])
     #     # 2. Apply request.limit (0 = all)
     #     # 3. yield each Message
     #     pass
 
     # def SendBulkMessages(self, request_iterator, context):
-    #     # TODO Exercise 03 — implement client streaming
+    #     # TODO Exercise 05 — implement client streaming
     #     # 1. Iterate request_iterator
     #     # 2. Call _make_message for each request
     #     # 3. Return BulkResponse(messages_sent=..., messages_failed=...)
     #     pass
 
     # def Chat(self, request_iterator, context):
-    #     # TODO Exercise 03 (bonus) — bidirectional streaming
+    #     # TODO Exercise 05 (bonus) — bidirectional streaming
     #     # 1. Iterate request_iterator
     #     # 2. For each request, save and yield the message back
     #     pass
 
 
-def serve(port: int = 50051, metrics_port: int = 8000) -> None:
-    start_http_server(metrics_port)
+def serve(port: int = 50051) -> None:
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     chat_pb2_grpc.add_ChatServiceServicer_to_server(ChatServicer(), server)
     server.add_insecure_port(f"[::]:{port}")
     server.start()
     print(f"gRPC server listening on :{port}")
-    print(f"Prometheus metrics at http://localhost:{metrics_port}/metrics")
     server.wait_for_termination()

@@ -34,6 +34,19 @@ poe generate-exercises
 # No errors → exercises/generated/ updated
 ```
 
+## ✅ Micro-check
+
+After `poe generate-exercises` you should see **no errors** on the terminal and
+two new files in `exercises/generated/`:
+
+```
+exercises/generated/chat_pb2.py
+exercises/generated/chat_pb2_grpc.py
+```
+
+If `protoc` prints `Field number 0 is illegal`, a field tag is missing.
+If it prints `Expected field name`, a brace or semicolon is wrong.
+
 ## Solution
 
 `solutions/01_protocol_buffers/chat.proto`

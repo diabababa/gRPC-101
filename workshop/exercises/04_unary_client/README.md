@@ -33,16 +33,30 @@ Open `client_starter.py` and fill in the TODOs:
 
 ```bash
 # Terminal 1 — start the server from Exercise 3
-python exercises/03_unary_service/server_starter.py
+poe server
 
 # Terminal 2 — run your client
-python exercises/04_unary_client/client_starter.py
+poe starter-04
 # Expected output:
 #   message_id: <uuid>
 #   status:     ok
 ```
 
 Try sending an empty message — what error code do you get?
+
+## ✅ Micro-check
+
+Your script should print two lines, for example:
+
+```
+message_id: 3f2a1c7e-…
+status:     ok
+```
+
+If it raises `TypeError: insecure_channel() argument 1 must be str, not ellipsis`,
+you still have a `...` placeholder — fill in the channel address string.
+If it prints nothing and exits silently, the `except` block is swallowing the
+error — add a `print` inside the `except` so you can see what went wrong.
 
 ## Solution
 

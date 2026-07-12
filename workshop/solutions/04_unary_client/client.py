@@ -1,8 +1,8 @@
-"""Solution: unary gRPC client."""
+"""Solution — Exercise 04: completed unary gRPC client."""
 
 import grpc
 
-from solutions.generated import chat_pb2, chat_pb2_grpc
+from exercises.generated import chat_pb2, chat_pb2_grpc
 
 
 def main():
