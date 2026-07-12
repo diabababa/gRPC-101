@@ -33,19 +33,19 @@ order = (
     # diff service vs server
     "project_setup",
     # "what_project_are_we_building", !!!
-    "unary",
-    "server_streaming",
-    "client_streaming",
-    "bidirectional_streaming",
+    "exercises",
+    # "server_streaming",
+    # "client_streaming",
+    # "bidirectional_streaming",
     # "create_service",
     # # "create_service_stub",
     # # "implement_service_stub",
     # "create_client",
     # # "how_to_implement_4_patterns_to_clientexercise5_implement_4_patterns_to_client",
-    "error_handling_and_status_codes",
-    "cancellation_and_deadlines",
+    # "error_handling_and_status_codes",
+    # "cancellation_and_deadlines",
     # TODO: add more: next guides https://grpc.io/docs/guides/
-    "production",
+    # "production",
     # "metadata&interceptors",
     # Authentication
     # Graceful Shutdown
