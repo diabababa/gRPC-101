@@ -21,7 +21,7 @@ Build a real-time **Chat Service** using gRPC and Python, covering all four comm
 uv sync
 
 # 2. Generate gRPC code from .proto
-poe generate
+poe generate-exercises
 
 # 3. Start the server
 poe server
