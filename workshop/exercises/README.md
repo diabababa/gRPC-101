@@ -1,3 +1,25 @@
+
+# How to prepare for the workshop
+
+- Install Python 3.11 or higher
+- Install docker and docker-compose or install uv
+
+You have three ways to run exercises:
+1. **use docker** 
+```bash
+docker compose run --rm workshop <poe command>
+```
+2. **use uv**
+```bash
+uv run <poe command>
+```
+
+3. **use venv**
+```bash
+uv sync
+source .venv/bin/activate
+<poe command>
+```
 # Exercise 1: Proto Messages (15 min)
 
 ## Goal

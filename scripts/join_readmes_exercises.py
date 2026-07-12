@@ -21,6 +21,29 @@ solutions_order = (
     "client.py"
 )
 
+how_to_prepare = """
+# How to prepare for the workshop
+
+Install docker and docker-compose or install uv
+
+You have three ways to run exercises:
+1. **use docker** 
+```bash
+docker compose run --rm workshop <poe command>
+```
+2. **use uv**
+```bash
+uv run <poe command>
+```
+
+3. **use venv**
+```bash
+uv sync
+source .venv/bin/activate
+<poe command>
+```
+"""
+
 workshop_directory = "/".join(os.getcwd().split("/")[:-1])+"/workshop"
 exercises_directory = os.path.join(workshop_directory, "exercises")
 solutions_directory = os.path.join(workshop_directory, "solutions")
@@ -34,7 +57,7 @@ for index, exercise_chapter in enumerate(order):
     ) as f:
         temp_text = f.read()
     with open(f"{exercises_directory}/README.md", "a") as f:
-        f.write(f"{new_line * 2 if index > 0 else ''}{temp_text}")
+        f.write(f"{new_line * 2 if index > 0 else how_to_prepare}{temp_text}")
     solution_path = os.path.join(f"{exercises_directory}", solutions_order[index]) if index == 6 else os.path.join(f"{solutions_directory}/{exercise_chapter}", solutions_order[index])
     with open(solution_path) as f:
         temp_text = f.read()
