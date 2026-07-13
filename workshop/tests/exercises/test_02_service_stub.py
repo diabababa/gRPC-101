@@ -19,11 +19,11 @@ from exercises.server import ChatServicer  # noqa: E402
 
 
 def test_chatservicer_inherits_from_generated_base():
-    assert issubclass(ChatServicer, chat_pb2_grpc.ChatServiceServicer)
+    pytest.fail("Implement this test")
 
 
 def test_chatservicer_has_send_message():
-    assert callable(getattr(ChatServicer, "SendMessage", None))
+    pytest.fail("Implement this test")
 
 
 def test_chatservicer_has_get_history():
@@ -39,4 +39,4 @@ def test_chatservicer_has_chat():
 
 
 def test_chatservicer_can_be_instantiated():
-    assert ChatServicer() is not None
+    pytest.fail("Implement this test")

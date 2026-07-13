@@ -7,15 +7,6 @@ Run: poe test-exercises
 import pytest
 
 
-def test_generated_chat_classes():
-    error = ""
-    try:
-        from exercises.generated import chat_pb2
-    except ImportError as e:
-        error = e
-    assert error == ""
-
-
 def test_message_request_has_correct_fields():
     # TODO: create a MessageRequest with room_id="r", user="u", content="c"
     # TODO: assert each field has the expected value
