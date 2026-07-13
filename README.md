@@ -78,15 +78,19 @@ poe test-solutions
 |---------|------------|------|
 | Protocol | HTTP/1.1 | HTTP/2 (Multiplexing allows streaming) |
 | Format | JSON (text) | Binary format (Protobuf) |
-| Performance | Good | Excellent (HTTP/2 + Protobuf) |
+| Performance | Good | Good+ (HTTP/2 + Protobuf) |
 | Human readable | ✅  Yes | ❌ Binary |
 | Streaming | Server-Sent Events (SSE), WebSocket, Long Polling | [Native] Server, Client, Bidirectional |
 | Contract + Code gen | Optional | Protobuf |
 | Browser support | ✅ Native | ❌ Needs grpc-web proxy |
 
+---
 
-# TODO: Locust show diffrence rest vs grpc  SHOW SOME NUMBER - COMPARISION
+# gRPC vs REST performance benchmark with k6
 
+[https://github.com/Ag0r9/k6-testing/](https://github.com/Ag0r9/k6-testing/)
+
+![alt text](assets/grpc_vs_rest.png)
 
 # When to Use gRPC
 
