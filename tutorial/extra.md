@@ -64,7 +64,7 @@ def test_get_history_streams_messages(stub):
 
 ---
 
-# 🛠️ Exercise 6: Testing (20 min)
+# 🛠️ Exercise 6: Testing 
 
 Open `exercises/06_testing/README.md`
 
@@ -159,7 +159,7 @@ locust -f solutions/07_performance/locustfile.py \
 
 ---
 
-# 🛠️ Exercise 7: Performance (20 min)
+# 🛠️ Exercise 7: Performance 
 
 Open `exercises/07_performance/README.md`
 
@@ -252,7 +252,7 @@ scrape_configs:
 
 ---
 
-# 🛠️ Exercise 8: Monitoring (20 min)
+# 🛠️ Exercise 8: Monitoring 
 
 ```bash
 # Start everything

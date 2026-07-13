@@ -25,15 +25,15 @@ Requirements: Basic Python knowledge and Docker installed.
 
 Proposal agenda
 
-1. **Welcome & Introduction** (10 min)
-2. **gRPC vs REST** (20 min)
-3. **Protocol Buffers Hands-On** (30 min)
-4. **Building Your First gRPC Service** (30 min)
-5. **Communication Patterns** (20 min)
-6. **Testing** (20 min)
-7. **Performance** (20 min)
-8. **Monitoring** (20 min)
-9. **Review & Q&A** (10 min)
+1. **Welcome & Introduction** 
+2. **gRPC vs REST** 
+3. **Protocol Buffers Hands-On** 
+4. **Building Your First gRPC Service** 
+5. **Communication Patterns** 
+6. **Testing** 
+7. **Performance** 
+8. **Monitoring** 
+9. **Review & Q&A** 
 
 ## Why you are qualified to give this talk?
 ### Descriptions of previous professional or personal projects about your proposal, previous talks or blog posts, or links to repos containing code about your project are all helpful to show this.

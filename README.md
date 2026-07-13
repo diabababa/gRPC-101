@@ -1,6 +1,6 @@
 # Project Setup
 
-## TODO: add QR code
+![alt text](assets/qrcode_github.com.png)
 
 clone repository: <strong>github.com/kamilkulig/grpc-101</strong>
 
@@ -67,7 +67,7 @@ discord: kamilkulig
 
 * By Google Open-sourced 2016, opence soruce [CNCF](https://en.wikipedia.org/wiki/Cloud_Native_Computing_Foundation)
 
-* Supports multiple programming languages (C++, Java, Python, Go, C#, Ruby, Node.js, PHP, Dart, Kotlin, Rust, etc.)
+* Supports multiple programming languages (C++, Java, Python, Go, C#, Ruby, Node.js, PHP, Dart, Kotlin, Rust)
   
 
 ---
@@ -395,7 +395,7 @@ message OrderStatusUpdate {
 
 # Project Setup
 
-## TODO: add QR code
+![alt text](assets/qrcode_github.com.png)
 
 clone repository: <strong>github.com/kamilkulig/grpc-101</strong>
 
@@ -542,7 +542,7 @@ message Message {
 
 </details>
 
-# Exercise 2: Build a Service Stub (10 min)
+# Exercise 2: Build a Service Stub 
 
 ## Goal
 
@@ -957,7 +957,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 5: Streaming Patterns (20 min)
+# Exercise 5: Streaming Patterns 
 
 ## Goal
 
@@ -1244,7 +1244,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 6: Deadlines, Cancellation, and Error Handling (20 min)
+# Exercise 6: Deadlines, Cancellation, and Error Handling 
 
 ## Goal
 
@@ -1418,7 +1418,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 7: Final Chat Client in `client.py` (30 min)
+# Exercise 7: Final Chat Client in `client.py` 
 
 ## Goal
 

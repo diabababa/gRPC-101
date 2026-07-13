@@ -1,6 +1,6 @@
 # Project Setup
 
-## TODO: add QR code
+![alt text](assets/qrcode_github.com.png)
 
 clone repository: <strong>github.com/kamilkulig/grpc-101</strong>
 

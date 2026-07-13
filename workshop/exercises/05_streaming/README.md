@@ -1,4 +1,4 @@
-# Exercise 5: Streaming Patterns (20 min)
+# Exercise 5: Streaming Patterns 
 
 ## Goal
 

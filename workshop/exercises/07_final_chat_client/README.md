@@ -1,4 +1,4 @@
-# Exercise 7: Final Chat Client in `client.py` (30 min)
+# Exercise 7: Final Chat Client in `client.py` 
 
 ## Goal
 

@@ -1,4 +1,4 @@
-# Exercise 2: Build a Service Stub (10 min)
+# Exercise 2: Build a Service Stub 
 
 ## Goal
 

@@ -1,4 +1,4 @@
-# Exercise 6: Deadlines, Cancellation, and Error Handling (20 min)
+# Exercise 6: Deadlines, Cancellation, and Error Handling 
 
 ## Goal
 

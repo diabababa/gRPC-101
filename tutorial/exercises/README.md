@@ -124,7 +124,7 @@ message Message {
 
 </details>
 
-# Exercise 2: Build a Service Stub (10 min)
+# Exercise 2: Build a Service Stub 
 
 ## Goal
 
@@ -539,7 +539,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 5: Streaming Patterns (20 min)
+# Exercise 5: Streaming Patterns 
 
 ## Goal
 
@@ -826,7 +826,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 6: Deadlines, Cancellation, and Error Handling (20 min)
+# Exercise 6: Deadlines, Cancellation, and Error Handling 
 
 ## Goal
 
@@ -1000,7 +1000,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 7: Final Chat Client in `client.py` (30 min)
+# Exercise 7: Final Chat Client in `client.py` 
 
 ## Goal
 
