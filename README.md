@@ -96,6 +96,8 @@ If you want to see results with a better methodology https://kth.diva-portal.org
 
 --- 
 
+
+
 # When to Use gRPC
 
 
@@ -128,6 +130,58 @@ Generate client and server stubs code with grpc_tools.protoc.
 
 Implement server and call it from client.
 
+
+---
+
+# Communication Patterns
+
+## Unary Request - Response
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request
+    Server-->>Client: Response
+```
+
+# Server streaming
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request
+    Server-->>Client: Response 1
+    Server-->>Client: Response 2
+    Server-->>Client: Response 3
+```
+
+# Client Streaming
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request 1
+    Client->>Server: Request 2
+    Client->>Server: Request 3
+    Server-->>Client: Response
+```
+
+# Bidirectional Streaming
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    Client->>Server: Request 1
+    Server-->>Client: Response 1
+    Client->>Server: Request 2
+    Server-->>Client: Response 2
+    Client->>Server: Request 3
+    Server-->>Client: Response 3
+```
+
+---
 
 <details>
   <summary>LIVE CODING.</summary>
