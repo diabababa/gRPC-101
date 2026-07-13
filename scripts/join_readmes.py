@@ -1,24 +1,24 @@
 import os
 import shutil
 
+# order = (
+#     "introduction",
+#     "why_mongodb",
+#     "python_mongodb_tools",
+#     "mongodb_atlas",
+#     "documents_database",
+#     "connection_to_db",
+#     "data_structure",
+#     "data_generators",
+#     "simple_queries_atlas",
+#     "crud_queries",
+#     "tests",
+#     "resources",
+# )
 order = (
-    "introduction",
-    "why_mongodb",
-    "python_mongodb_tools",
-    "project_setup",
-    "mongodb_atlas",
-    "documents_database",
-    "connection_to_db",
-    "data_structure",
-    "data_generators",
-    "simple_queries_atlas",
-    "crud_queries",
-    "tests",
-    "resources",
-)
-order = (
-    "project_setup",
+    # "project_setup",
     "workshop_instructor_introduction",
+    "project_setup",
     "grpc_inroduction",
     # "what_is_RPC",
     # "what_is_gRPC", gRPC is designed to support high-performance open-source RPCs in many languages.

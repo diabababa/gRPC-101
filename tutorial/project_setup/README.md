@@ -2,7 +2,9 @@
 
 ![alt text](assets/qrcode_github.com.png)
 
-clone repository: <strong>github.com/kamilkulig/grpc-101</strong>
+```bash
+git clone https://github.com/KuligKamil/grpc-workshop/
+```
 
 
 ```bash

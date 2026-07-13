@@ -1,33 +1,7 @@
-# Project Setup
-
-![alt text](assets/qrcode_github.com.png)
-
-clone repository: <strong>github.com/kamilkulig/grpc-101</strong>
-
-
-```bash
-# Clone & enter workshop
-cd workshop
-
-# run test-exercises
-docker compose run --rm workshop poe test-solutions
-docker compose run --rm workshop poe test-exercises
-
-# Or create virtualenv and install deps and run
-uv sync
-source .venv/bin/activate
-poe test-exercises
-poe test-solutions
-```
-
-
 # gRPC for Beginners
 
-[https://github.com/KuligKamil/grpc-workshop/](https://github.com/KuligKamil/grpc-workshop/)
 
-TODO: ADD QR CODE
-
-Adam Gorgon - 
+Adam Gorgon -  ML Engineer 
 
 github: https://github.com/Ag0r9
 
@@ -46,6 +20,31 @@ linkedin: https://www.linkedin.com/in/kamil-kulig-81488b89/
 discord: kamilkulig
 
 ---
+
+
+# Project Setup
+
+![alt text](assets/qrcode_github.com.png)
+
+```bash
+git clone https://github.com/KuligKamil/grpc-workshop/
+```
+
+
+```bash
+# Clone & enter workshop
+cd workshop
+
+# run test-exercises
+docker compose run --rm workshop poe test-solutions
+docker compose run --rm workshop poe test-exercises
+
+# Or create virtualenv and install deps and run
+uv sync
+source .venv/bin/activate
+poe test-exercises
+poe test-solutions
+```
 
 
 # What is gRPC (recursive acronym for gRPC Remote Procedure Calls)?
@@ -96,39 +95,20 @@ discord: kamilkulig
 
 - Microservice-to-microservice communication.
 - Real-time bidirectional streaming (chat, IoT, gaming).
-- Polyglot environments (Python + Go + Java).
+- Polyglot environments, for example: Python, Go, Rust.
 - High-throughput, low-latency APIs.
+- Compact binary payloads for bandwidth-sensitive applications.
 - Used by Google, Netflix, Square, Cisco, CockroachDB...
-
-<!-- - Bandwidth-constrained clients — binary payloads use less data than JSON, matters on weak or metered connections (mobile data, IoT in the field, connected cars) -->
-
 
 ### ❌ Not the best fit
 
 - Public APIs consumed by browsers directly.
-- Simple CRUD with occasional calls.
+- Simple scripts, one-off tools, or CRUD applications that make only occasional calls.
 - Teams unfamiliar with Protobuf.
 - Debugging / human inspection of traffic.
-- Simple scripts & one-off tools.
-- Developer Experience is crucial.
 
 
-Rule of thumb:
-First REST API — better for external/public communication (partner APIs, browsers, simplicity). If you really need gRPC, then use it for internal communication (microservices, M2M, low latency);  gRPC between services, REST at the edge.
-
-<!-- REST to styl architektoniczny (zbiór zasad), a nie konkretna technologia — nie da się go "użyć" wprost.
-REST API to konkretna implementacja tego stylu (zwykle HTTP + JSON), czyli realny konkurent gRPC pod względem wydajności, formatu danych, itd. -->
-<!-- Short rule of thumb: gRPC — great for internal communication (microservices, M2M, low latency); REST API — better for external/public communication (partner APIs, browsers, simplicity). -->
-
-
-<!-- ### GRPC with Python  -->
-
-<!-- To use it we need to install grpcio and grpcio-tools packages.  -->
-<!-- https://github.com/vmagamedov/grpclib/issues/81#issuecomment-825697050
-https://github.com/llucax/python-grpc-benchmark
-This project is archived because grpclib's author said there are no plans for further development, so performance seems to be less important when choosing which library to use.
-For async alternative is grpclib. But today we will not focus on it. We will use grpcio and grpcio-tools. -->
-
+A common rule of thumb: Use REST at the edge, gRPC inside.
 
 
 ### Basics in gRPC 
@@ -397,7 +377,9 @@ message OrderStatusUpdate {
 
 ![alt text](assets/qrcode_github.com.png)
 
-clone repository: <strong>github.com/kamilkulig/grpc-101</strong>
+```bash
+git clone https://github.com/KuligKamil/grpc-workshop/
+```
 
 
 ```bash

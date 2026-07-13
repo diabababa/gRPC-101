@@ -1,10 +1,7 @@
 # gRPC for Beginners
 
-[https://github.com/KuligKamil/grpc-workshop/](https://github.com/KuligKamil/grpc-workshop/)
 
-TODO: ADD QR CODE
-
-Adam Gorgon - 
+Adam Gorgon -  ML Engineer 
 
 github: https://github.com/Ag0r9
 
