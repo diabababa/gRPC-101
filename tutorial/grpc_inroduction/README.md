@@ -15,7 +15,7 @@
     |                               |
   ```
 
-* By Google Open-sourced 2016, opence soruce [CNCF](https://en.wikipedia.org/wiki/Cloud_Native_Computing_Foundation)
+* By Google Open-sourced 2016, open source [CNCF](https://en.wikipedia.org/wiki/Cloud_Native_Computing_Foundation)
 
 * Supports multiple programming languages (C++, Java, Python, Go, C#, Ruby, Node.js, PHP, Dart, Kotlin, Rust)
   
@@ -43,6 +43,10 @@
 
 ![alt text](assets/grpc_vs_rest.png)
 
+If you want to see results with a better methodology https://kth.diva-portal.org/smash/get/diva2:1792957/FULLTEXT01.pdf
+
+--- 
+
 # When to Use gRPC
 
 
@@ -63,8 +67,9 @@
 - Debugging / human inspection of traffic.
 
 
-A common rule of thumb: Use REST at the edge, gRPC inside.
+A common rule of thumb: Use REST API at the edge, gRPC inside.
 
+---
 
 ### Basics in gRPC 
 
@@ -73,10 +78,6 @@ Write a contract. Create .proto file use Protobuf.
 Generate client and server stubs code with grpc_tools.protoc.
 
 Implement server and call it from client.
-
-
-LET'S CREATE SIMPLE PROJECT. Just watch, step by step I will explain what is going on. After DEMO you will do exercises.
-
 
 
 <details>
