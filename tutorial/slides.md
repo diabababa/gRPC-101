@@ -872,14 +872,17 @@ hideInToc: true
 
 # Go deeper
 
-- **Deadlines** — client sets a timeout (`timeout=5.0`); server is automatically notified when it passes and can stop processing early via `context.time_remaining()`
-- **Cancellation** — client can abort an in-flight call at any time; server detects it with `context.is_active()` returning `False` — no leaked streams or wasted work
 - **Metadata** — key-value headers sent with every call (like HTTP headers); standard way to pass auth tokens, request IDs, or tracing context without touching the proto schema
 - **TLS / mTLS** — secure your gRPC channels
 - **Interceptors** — middleware for auth, logging, tracing
 - **gRPC-Web** — use gRPC from browsers
-- **OpenTelemetry** — distributed tracing
-- **Server reflection** — dynamic service discovery (grpcurl)
+- **Reflection** — dynamic service discovery (grpcurl)
+- 
+
+
+- `grpc.io/docs` — official docs
+- `github.com/grpc/grpc` — gRPC repo
+- `buf.build` — modern proto toolchain
 
 ---
 

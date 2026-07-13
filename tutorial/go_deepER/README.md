@@ -1,2 +1,0 @@
-# go_deepER
-Adam

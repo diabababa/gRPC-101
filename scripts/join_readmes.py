@@ -52,9 +52,9 @@ order = (
     # Health Checking
     # Reflaction
     # Monitoring
-    "summary",
-    "go_deepER",
-    "resources",
+    # "summary",
+    "next",
+    # "resources",
     "Q&A",
 )
 
