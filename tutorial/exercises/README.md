@@ -19,7 +19,7 @@ uv sync
 source .venv/bin/activate
 <poe command>
 ```
-# Exercise 1: Proto Messages (15 min)
+# Exercise 1: Proto Messages
 
 ## Goal
 
@@ -260,7 +260,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 3: Implement Unary SendMessage (15 min)
+# Exercise 3: Implement Unary SendMessage
 
 ## Goal
 
@@ -437,7 +437,7 @@ if __name__ == "__main__":
 
 </details>
 
-# Exercise 4: Unary Client + Verify Communication (15 min)
+# Exercise 4: Unary Client + Verify Communication
 
 ## Goal
 

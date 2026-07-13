@@ -1,4 +1,4 @@
-# Exercise 4: Unary Client + Verify Communication (15 min)
+# Exercise 4: Unary Client + Verify Communication
 
 ## Goal
 

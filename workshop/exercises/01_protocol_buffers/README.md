@@ -1,4 +1,4 @@
-# Exercise 1: Proto Messages (15 min)
+# Exercise 1: Proto Messages
 
 ## Goal
 

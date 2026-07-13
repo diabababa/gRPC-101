@@ -1,4 +1,4 @@
-# Exercise 3: Implement Unary SendMessage (15 min)
+# Exercise 3: Implement Unary SendMessage
 
 ## Goal
 
