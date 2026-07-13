@@ -30,5 +30,5 @@ def test_client_receives_unique_id_per_message(stub):
 def test_client_gets_invalid_argument_on_empty_content(stub):
     # TODO: use pytest.raises(grpc.RpcError)
     # TODO: send a message with content=""
-    # TODO: assert exc_info.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    # TODO: assert exc_info.value.code() == StatusCode.INVALID_ARGUMENT
     pytest.fail("Implement this test")

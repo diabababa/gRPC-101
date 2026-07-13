@@ -3,6 +3,7 @@ import uuid
 from concurrent import futures
 
 import grpc
+from grpc import StatusCode
 
 from exercises.generated import chat_pb2, chat_pb2_grpc
 

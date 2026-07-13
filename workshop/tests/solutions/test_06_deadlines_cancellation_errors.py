@@ -6,6 +6,7 @@ import importlib.util
 from pathlib import Path
 
 import grpc
+from grpc import StatusCode
 
 
 def _load_deadlines_module():
@@ -38,4 +39,4 @@ def test_invalid_argument_demo_returns_invalid_argument(grpc_addr):
     module = _load_deadlines_module()
     module.SOLUTION_SERVER = grpc_addr
     code = module.demo_invalid_argument()
-    assert code == grpc.StatusCode.INVALID_ARGUMENT
+    assert code == StatusCode.INVALID_ARGUMENT

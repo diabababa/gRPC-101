@@ -2,6 +2,7 @@
 
 import grpc
 import pytest
+from grpc import StatusCode
 
 from solutions.generated import chat_pb2
 
@@ -29,4 +30,4 @@ def test_client_gets_invalid_argument_on_empty_content(stub):
         stub.SendMessage(
             chat_pb2.MessageRequest(room_id="room", user="alice", content="")
         )
-    assert exc_info.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert exc_info.value.code() == StatusCode.INVALID_ARGUMENT

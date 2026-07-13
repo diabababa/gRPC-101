@@ -41,5 +41,5 @@ def test_send_message_generates_unique_ids(stub):
 def test_empty_content_raises_invalid_argument(stub):
     # TODO: use pytest.raises(grpc.RpcError) to catch the error
     # TODO: call stub.SendMessage with content=""
-    # TODO: assert exc_info.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    # TODO: assert exc_info.value.code() == StatusCode.INVALID_ARGUMENT
     pytest.fail("Implement this test")

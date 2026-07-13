@@ -1,6 +1,7 @@
 """Solution tests — Exercise 03: Implement Unary SendMessage."""
 import pytest
 import grpc
+from grpc import StatusCode
 
 from solutions.generated import chat_pb2
 
@@ -37,4 +38,4 @@ def test_empty_content_raises_invalid_argument(stub):
         stub.SendMessage(
             chat_pb2.MessageRequest(room_id="room", user="alice", content="")
         )
-    assert exc_info.value.code() == grpc.StatusCode.INVALID_ARGUMENT
+    assert exc_info.value.code() == StatusCode.INVALID_ARGUMENT

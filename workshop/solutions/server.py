@@ -4,6 +4,7 @@ import time
 import uuid
 
 import grpc
+from grpc import StatusCode
 from concurrent import futures
 
 from solutions.generated import chat_pb2, chat_pb2_grpc
@@ -27,7 +28,7 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     def SendMessage(self, request, context):
         if not request.content.strip():
             context.abort(
-                grpc.StatusCode.INVALID_ARGUMENT, "Message content cannot be empty"
+                StatusCode.INVALID_ARGUMENT, "Message content cannot be empty"
             )
         msg = _make_message(request)
         return chat_pb2.MessageResponse(

@@ -54,9 +54,9 @@ Open `exercises/server.py` and implement `SendMessage` inside the
 
 1. **Validate first** — if `request.content` is empty, abort before any
    persistence happens:
-   ```python
-   context.abort(grpc.StatusCode.INVALID_ARGUMENT, "Message content cannot be empty")
-   ```
+    ```python
+    context.abort(StatusCode.INVALID_ARGUMENT, "Message content cannot be empty")
+    ```
 2. **Save** — call `_make_message(request)`; it stores the message and
    returns a `Message` proto with `message_id` and `timestamp` already set
 3. **Return** — a `MessageResponse`:

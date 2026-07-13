@@ -35,7 +35,7 @@ def test_client_cancellation_returns_true():
 
 def test_invalid_argument_for_empty_content(stub):
     # TODO: call stub.SendMessage with content=""
-    # TODO: assert grpc.StatusCode.INVALID_ARGUMENT
+    # TODO: assert StatusCode.INVALID_ARGUMENT
     pytest.fail("Implement this test")
 
 
