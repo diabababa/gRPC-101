@@ -775,9 +775,9 @@ Open `exercises/server.py` and implement `SendMessage` inside the
 
 1. **Validate first** — if `request.content` is empty, abort before any
    persistence happens:
-   ```python
-   context.abort(grpc.StatusCode.INVALID_ARGUMENT, "Message content cannot be empty")
-   ```
+    ```python
+    context.abort(StatusCode.INVALID_ARGUMENT, "Message content cannot be empty")
+    ```
 2. **Save** — call `_make_message(request)`; it stores the message and
    returns a `Message` proto with `message_id` and `timestamp` already set
 3. **Return** — a `MessageResponse`:
@@ -837,6 +837,7 @@ import uuid
 from concurrent import futures
 
 import grpc
+from grpc import StatusCode
 
 from exercises.generated import chat_pb2, chat_pb2_grpc
 
@@ -860,7 +861,7 @@ class ChatServicer(chat_pb2_grpc.ChatServiceServicer):
     def SendMessage(self, request, context):
         if not request.content.strip():
             context.abort(
-                grpc.StatusCode.INVALID_ARGUMENT,
+                StatusCode.INVALID_ARGUMENT,
                 "Message content cannot be empty",
             )
         msg = _make_message(request)
@@ -1572,12 +1573,10 @@ If `chat` never prints replies, verify you are iterating `stub.Chat(...)`.
 
 """CLI client for the Chat gRPC service."""
 
-import sys
-
 import grpc
 import typer
 
-from exercises.generated import chat_pb2, chat_pb2_grpc
+from solutions.generated import chat_pb2, chat_pb2_grpc
 
 app = typer.Typer(help="Chat service client")
 
@@ -1595,14 +1594,17 @@ def send(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Exercise 07 — TODO: send a single message (unary RPC)."""
-    # TODO:
-    # 1) open insecure channel
-    # 2) create stub
-    # 3) call SendMessage with MessageRequest(room_id, user, content)
-    # 4) print response.message_id and response.status
-    # 5) handle grpc.RpcError with code/details
-    raise NotImplementedError("Exercise 07: implement send()")
+    """Exercise 07 solution: send a single message (unary RPC)."""
+    channel, stub = _stub(host, port)
+    with channel:
+        try:
+            response = stub.SendMessage(
+                chat_pb2.MessageRequest(room_id=room, user=user, content=message)
+            )
+            typer.echo(f"✓ Sent  id={response.message_id}  status={response.status}")
+        except grpc.RpcError as error:
+            typer.echo(f"✗ {error.code()}: {error.details()}", err=True)
+            raise typer.Exit(1)
 
 
 @app.command()
@@ -1612,14 +1614,16 @@ def history(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Exercise 07 — TODO: fetch message history (server-streaming RPC)."""
-    # TODO:
-    # 1) open insecure channel
-    # 2) create stub
-    # 3) call GetHistory with HistoryRequest(room_id, limit)
-    # 4) iterate stream and print each message
-    # 5) handle grpc.RpcError with code/details
-    raise NotImplementedError("Exercise 07: implement history()")
+    """Exercise 07 solution: fetch message history (server-streaming RPC)."""
+    channel, stub = _stub(host, port)
+    with channel:
+        try:
+            stream = stub.GetHistory(chat_pb2.HistoryRequest(room_id=room, limit=limit))
+            for message_item in stream:
+                typer.echo(f"[{message_item.user}] {message_item.content}")
+        except grpc.RpcError as error:
+            typer.echo(f"✗ {error.code()}: {error.details()}", err=True)
+            raise typer.Exit(1)
 
 
 @app.command()
@@ -1629,14 +1633,26 @@ def chat(
     host: str = typer.Option("localhost", hidden=True),
     port: int = typer.Option(50051, hidden=True),
 ) -> None:
-    """Exercise 07 — TODO: real-time chat (bidirectional streaming RPC)."""
-    # TODO:
-    # 1) define a request generator reading input lines
-    # 2) yield MessageRequest(room_id, user, content)
-    # 3) open insecure channel and create stub
-    # 4) iterate stub.Chat(generator) and print replies
-    # 5) handle KeyboardInterrupt/EOFError and grpc CANCELLED cleanly
-    raise NotImplementedError("Exercise 07: implement chat()")
+    """Exercise 07 solution: real-time bidirectional chat."""
+
+    def _requests():
+        typer.echo("Connected! Type messages and press Enter. Ctrl-C to quit.")
+        try:
+            while True:
+                line = input(f"{user}> ").strip()
+                if line:
+                    yield chat_pb2.MessageRequest(room_id=room, user=user, content=line)
+        except (KeyboardInterrupt, EOFError):
+            return
+
+    channel, stub = _stub(host, port)
+    with channel:
+        try:
+            for message_item in stub.Chat(_requests()):
+                typer.echo(f"  ← [{message_item.user}] {message_item.content}")
+        except grpc.RpcError as error:
+            if error.code() != grpc.StatusCode.CANCELLED:
+                typer.echo(f"✗ {error.code()}: {error.details()}", err=True)
 
 ```
 
