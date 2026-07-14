@@ -939,24 +939,6 @@ def demo_deadline_exceeded() -> grpc.StatusCode:
             return error.code()
 
 
-def demo_client_cancellation() -> bool:
-    print("\n[Cancel]")
-    with grpc.insecure_channel(UNREACHABLE_SERVER) as channel:
-        stub = chat_pb2_grpc.ChatServiceStub(channel)
-        future = stub.SendMessage.future(
-            chat_pb2.MessageRequest(
-                room_id="cancel-room",
-                user="alice",
-                content="cancel me",
-            ),
-            timeout=10,
-            wait_for_ready=True,
-        )
-        cancelled = future.cancel()
-        print(f"cancelled={cancelled}")
-        return cancelled
-
-
 def demo_invalid_argument() -> grpc.StatusCode:
     print("\n[Error]")
     with grpc.insecure_channel(SOLUTION_SERVER) as channel:
@@ -978,7 +960,6 @@ def demo_invalid_argument() -> grpc.StatusCode:
 
 def main() -> None:
     demo_deadline_exceeded()
-    demo_client_cancellation()
     demo_invalid_argument()
 
 
