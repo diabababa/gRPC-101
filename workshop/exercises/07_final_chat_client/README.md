@@ -3,7 +3,7 @@
 ## Goal
 
 Build the final workshop app by implementing three CLI commands directly in
-`exercises/client.py`:
+`exercises/07_final_chat_client/client.py`:
 
 - `send` (unary)
 - `history` (server streaming)
@@ -52,7 +52,7 @@ sequenceDiagram
 
 ## Your task
 
-Open `exercises/client.py` and implement these command functions:
+Open `exercises/07_final_chat_client/client.py` and implement these command functions:
 
 1. `send(...)`
    - build `MessageRequest`
@@ -73,6 +73,8 @@ Open `exercises/client.py` and implement these command functions:
    - ignore/quietly handle `StatusCode.CANCELLED`
 
 ## Run it
+
+Copy client.py from workshop/exercises/07_final_chat_client/ to workshop/exercises/
 
 ```bash
 # Terminal 1

@@ -2,9 +2,6 @@
 
 Run your solution server first:
     poe server-solutions
-
-Then run this script:
-    poe demo-06-solution
 """
 
 import grpc
