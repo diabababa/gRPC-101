@@ -15,9 +15,9 @@
     |                               |
   ```
 
-* By Google Open-sourced 2016, open source [CNCF](https://en.wikipedia.org/wiki/Cloud_Native_Computing_Foundation)
+* Created by Google — open-sourced in 2015, 1.0 released in 2016, donated to [CNCF](https://en.wikipedia.org/wiki/Cloud_Native_Computing_Foundation) in 2017
 
-* Supports multiple programming languages (C++, Java, Python, Go, C#, Ruby, Node.js, PHP, Dart, Kotlin, Rust)
+* Supports 11 programming languages (C++, Java, Python, Go, C#, Ruby, Node.js, PHP, Dart, Kotlin, Rust)
   
 
 ---
@@ -27,7 +27,7 @@
 
 | Aspect | REST API | gRPC |
 |---------|------------|------|
-| Protocol | HTTP/1.1 | HTTP/2 (Multiplexing allows streaming) |
+| Protocol | Usually HTTP/1.1 | HTTP/2 (Multiplexing allows streaming) |
 | Format | JSON (text) | Binary format (Protobuf) |
 | Performance | Good | Good+ (HTTP/2 + Protobuf) |
 | Human readable | ✅  Yes | ❌ Binary |
@@ -86,7 +86,7 @@ Implement server and call it from client.
 
 # Communication Patterns
 
-## Unary Request - Response
+## Unary: Request - Response
 ```mermaid
 sequenceDiagram
     participant Client
@@ -95,7 +95,7 @@ sequenceDiagram
     Server-->>Client: Response
 ```
 
-# Server streaming
+## Server streaming
 ```mermaid
 sequenceDiagram
     participant Client
@@ -106,7 +106,7 @@ sequenceDiagram
     Server-->>Client: Response 3
 ```
 
-# Client Streaming
+## Client Streaming
 
 ```mermaid
 sequenceDiagram
@@ -118,7 +118,7 @@ sequenceDiagram
     Server-->>Client: Response
 ```
 
-# Bidirectional Streaming
+## Bidirectional Streaming
 
 ```mermaid
 sequenceDiagram
