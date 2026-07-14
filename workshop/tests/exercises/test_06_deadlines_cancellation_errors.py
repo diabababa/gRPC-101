@@ -1,4 +1,4 @@
-"""Exercise 06 — Deadlines, Cancellation, and Error Handling.
+"""Exercise 06 — Deadlines and Error Handling.
 
 Complete Exercise 06 and make these tests pass.
 Run: poe test-exercises
@@ -22,14 +22,6 @@ def test_deadline_exceeded_on_unreachable_server():
     # TODO: create ChatServiceStub
     # TODO: call SendMessage(..., timeout=0.2, wait_for_ready=True)
     # TODO: assert grpc.StatusCode.DEADLINE_EXCEEDED
-    pytest.fail("Implement this test")
-
-
-def test_client_cancellation_returns_true():
-    # TODO: create channel to UNREACHABLE_SERVER
-    # TODO: create ChatServiceStub
-    # TODO: start async unary call with SendMessage.future(..., timeout=10, wait_for_ready=True)
-    # TODO: cancel future and assert cancelled is True
     pytest.fail("Implement this test")
 
 

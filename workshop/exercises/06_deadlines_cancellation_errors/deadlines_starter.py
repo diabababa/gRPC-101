@@ -1,4 +1,4 @@
-"""Exercise 6 — deadlines, cancellation, and status-aware error handling.
+"""Exercise 6 — deadlines and status-aware error handling.
 
 Run your exercise server first:
     poe server
@@ -28,19 +28,6 @@ def demo_deadline_exceeded() -> None:
     # TODO
 
 
-def demo_client_cancellation() -> None:
-    """TODO: start unary .future(...) call and cancel it immediately.
-
-    Steps:
-    1. Open channel to UNREACHABLE_SERVER
-    2. Create ChatServiceStub
-    3. Start async unary call with SendMessage.future(..., timeout=10, wait_for_ready=True)
-    4. Call future.cancel() and print the boolean result
-    """
-    print("\n[Cancel]")
-    # TODO
-
-
 def demo_invalid_argument() -> None:
     """TODO: call SendMessage with empty content and inspect status code/details."""
     print("\n[Error]")
@@ -52,7 +39,6 @@ def demo_invalid_argument() -> None:
 
 def main() -> None:
     demo_deadline_exceeded()
-    demo_client_cancellation()
     demo_invalid_argument()
 
 
