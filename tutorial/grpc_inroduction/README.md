@@ -135,47 +135,56 @@ sequenceDiagram
 ---
 
 <details>
-  <summary>LIVE CODING.</summary>
-Create new fresh project:
+  <summary>LIVE CODING.</summary>Create new fresh project:
 
 ```bash
 mkdir grpc_test
+cd grpc_test
 uv init
 ```
 
 Create project and install the grpcio and grpcio-tools package:
 
 ```bash
-source .venv/bin/activate
-
 uv add grpcio grpcio-tools
+source .venv/bin/activate
 ```
 
 Create a .proto file with your service definition and messages. For example, create a file named `contract.proto`:
 
 ```proto
-
 syntax = "proto3";
 
-message Request {
-  string context = 1;
-  int32 number = 2;
+message NameMessage {
+  //  Field numbers (1, 2...) are binary tags,
+  // not values — must stay
+  // unique and never change once deployed
+  //  (backward compatibility).
+  string name = 1;
 }
 
-message Response {
+message ResultMessage {
+  string hello = 1;
+}
+
+message RequestMessage {
+  int32 number = 1;
+}
+
+message ResponseMessage {
   string status = 1;
   int32 number = 2;
 }
 
 service Hello {
   // def SendHello(RequestMessage: RequestMessage) -> Response Message:
-  rpc SendHello(Request) returns (Response);
-
+  rpc SendHello(NameMessage) returns (ResultMessage);
+  rpc Counting(RequestMessage) returns (stream ResponseMessage);
 }
 ```
 
 ```bash
-python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. --pyi_out=. --include_imports contract.proto
+python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. --pyi_out=. contract.proto
 ``` 
 
 -I / --proto_path - basic catalog for imports in .proto files
@@ -186,15 +195,15 @@ python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. --pyi_out=. 
 
 --pyi_out - typing stubs (helps with autocompletion in IDE)
 
---include_imports - useful for generating descriptor sets for reflection
+After running the command, you will get three files:
 
-After running the command, you will get two files:
+* contract_pb2.py — contains classes for messages defined in your .proto file
 
-* _pb2.py — contains classes for messages defined in your .proto file
+* contract_pb2_grpc.py — contains classes for gRPC service
 
-* _pb2_grpc.py — contains classes for gRPC service
+* contract_pb2.pyi - type stubs 
 
-In _pb2_grpc.py you will find:
+In contract_pb2_grpc.py you will find:
 
 * Stub — client class to use RPC 
 
@@ -204,25 +213,39 @@ In _pb2_grpc.py you will find:
 
 ```python
 # server.py
-
 from concurrent.futures import ThreadPoolExecutor
+import time
 
 from grpc import server
-from contract_pb2 import Request, Response
+from contract_pb2 import RequestMessage, ResponseMessage, NameMessage, ResultMessage
 from contract_pb2_grpc import HelloServicer, add_HelloServicer_to_server
 
 
 class Check(HelloServicer):
-    def SendHello(self, request: Request, context) -> Response:
-        print(f"Request from client: {request.context}")
-        return Response(status=f"{request.context} Hello!!!!")
+    def SendHello(self, request: NameMessage, context) -> ResultMessage:
+        message = f"Cześć {request.name}!"
+        print(message)
+        return ResultMessage(hello=message)
+
+    def Counting(self, request: RequestMessage, context):
+        for i in range(1, request.number + 1):
+            now = time.strftime("%H:%M:%S")
+            print(f"[server] {now} sending {i}")
+            yield ResponseMessage(status=now, number=i)
+            time.sleep(1)
+
 
 server = server(ThreadPoolExecutor())
-add_HelloServicer_to_server(servicer=Check(), server=server)
+add_HelloServicer_to_server(Check(), server=server)
 server.add_insecure_port("localhost:5051")
-server.start()
-print("Server start working 💪")
-server.wait_for_termination()
+
+
+try:
+    server.start()
+    print("Server start working 💪")
+    server.wait_for_termination()
+finally:
+    server.stop(grace=5)
 ```
 
 start the server:
@@ -235,59 +258,93 @@ client.py
 
 ```python
 # client.py
-
-
 import time
 
 from grpc import insecure_channel
 
-from contract_pb2 import Request
-from contract_pb2_grpc import HelloServiceStub
+from contract_pb2 import NameMessage, RequestMessage
+from contract_pb2_grpc import HelloStub
 
+# Channel = the abstraction that governs all communication to a given server (or set of servers).
+# load balancing, connection state, credentials, keep-alive deadlines, transport security
 
 with insecure_channel("localhost:5051") as channel:
-    stub = HelloServiceStub(channel)
+    stub = HelloStub(channel)
 
-    response = stub.SendHello(Request(context="hi"))
-    print(response)
+    for _ in range(5):
+        response = stub.SendHello(NameMessage(name="Kamil"))
+        print(response)
+
+    for response in stub.Counting(RequestMessage(number=8)):
+        print(f"[client] {time.strftime('%H:%M:%S')} get: {response}")
+
 ```
 
-run client:
+Run client:
 
 ```bash
 uv run client.py 
 
 ```
 
-you will see the response from the server:
+You will see the response from the server:
 
 ``` bash
-status: "hi Hello!!!!"
+hello: "Cześć Kamil!"
+
+hello: "Cześć Kamil!"
+
+hello: "Cześć Kamil!"
+
+hello: "Cześć Kamil!"
+
+hello: "Cześć Kamil!"
+
+[client] 07:40:07 get: status: "07:40:07"
+number: 1
+
+[client] 07:40:08 get: status: "07:40:08"
+number: 2
+
+[client] 07:40:09 get: status: "07:40:09"
+number: 3
+
+[client] 07:40:10 get: status: "07:40:10"
+number: 4
+
+[client] 07:40:11 get: status: "07:40:11"
+number: 5
+
+[client] 07:40:12 get: status: "07:40:12"
+number: 6
+
+[client] 07:40:13 get: status: "07:40:13"
+number: 7
+
+[client] 07:40:14 get: status: "07:40:14"
+number: 8
+
 ```
 
 in server console you will see:
 
 ``` bash
-Request from client: hi
+Server start working 💪
+Cześć Kamil!
+Cześć Kamil!
+Cześć Kamil!
+Cześć Kamil!
+Cześć Kamil!
+[server] 07:40:07 sending 1
+[server] 07:40:08 sending 2
+[server] 07:40:09 sending 3
+[server] 07:40:10 sending 4
+[server] 07:40:11 sending 5
+[server] 07:40:12 sending 6
+[server] 07:40:13 sending 7
+[server] 07:40:14 sending 8
 ```
 
 
 </details>
 
-
-<!--
-10x / 3x — these are typical figures from Google's own benchmarks and community benchmarks
-(e.g. github.com/thekvs/cpp-serializers). The actual gain depends on message structure:
-flat, numeric-heavy messages compress more than deeply nested string-heavy ones.
-Tell participants: "treat these as order-of-magnitude, benchmark your own workload."
-
-Deadlines & cancellation:
-- REST: if the client disconnects, the server keeps running (no built-in signal).
-- gRPC: the client can attach a deadline (e.g. 500 ms). If the server hasn't finished
-  by then, the call is cancelled on both sides automatically. context.is_active()
-  returns False so you can stop early and free resources.
-  This matters a lot for streaming — you don't leak open streams when clients drop.
--->
-
-
----
