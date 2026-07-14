@@ -66,7 +66,7 @@ poe test-solutions
 
 * Created by Google — open-sourced in 2015, 1.0 released in 2016, donated to [CNCF](https://en.wikipedia.org/wiki/Cloud_Native_Computing_Foundation) in 2017
 
-* Supports multiple programming languages (C++, Java, Python, Go, C#, Ruby, Node.js, PHP, Dart, Kotlin, Rust)
+* Supports 11 programming languages (C++, Java, Python, Go, C#, Ruby, Node.js, PHP, Dart, Kotlin, Rust)
   
 
 ---
@@ -76,9 +76,9 @@ poe test-solutions
 
 | Aspect | REST API | gRPC |
 |---------|------------|------|
-| Protocol | Usually HTTP/1.1 | HTTP/2 (multiplexing allows streaming) |
+| Protocol | Usually HTTP/1.1 | HTTP/2 (Multiplexing allows streaming) |
 | Format | JSON (text) | Binary format (Protobuf) |
-| Performance | Baseline | Smaller payloads + faster serialization (Protobuf), one connection for many calls (HTTP/2) |
+| Performance | Good | Good+ (HTTP/2 + Protobuf) |
 | Human readable | ✅  Yes | ❌ Binary |
 | Streaming | Server-Sent Events (SSE), WebSocket, Long Polling | [Native] Server, Client, Bidirectional |
 | Contract + Code gen | Optional | Protobuf |
@@ -135,7 +135,7 @@ Implement server and call it from client.
 
 # Communication Patterns
 
-## Unary Request - Response
+## Unary: Request - Response
 ```mermaid
 sequenceDiagram
     participant Client
@@ -144,7 +144,7 @@ sequenceDiagram
     Server-->>Client: Response
 ```
 
-# Server streaming
+## Server streaming
 ```mermaid
 sequenceDiagram
     participant Client
@@ -155,7 +155,7 @@ sequenceDiagram
     Server-->>Client: Response 3
 ```
 
-# Client Streaming
+## Client Streaming
 
 ```mermaid
 sequenceDiagram
@@ -167,7 +167,7 @@ sequenceDiagram
     Server-->>Client: Response
 ```
 
-# Bidirectional Streaming
+## Bidirectional Streaming
 
 ```mermaid
 sequenceDiagram
@@ -189,15 +189,12 @@ Create new fresh project:
 
 ```bash
 mkdir grpc_test
-cd grpc_test
 uv init
 ```
 
 Create project and install the grpcio and grpcio-tools package:
 
 ```bash
-uv sync
-
 source .venv/bin/activate
 
 uv add grpcio grpcio-tools
@@ -227,7 +224,7 @@ service Hello {
 ```
 
 ```bash
-python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. --pyi_out=.  contract.proto
+python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. --pyi_out=. --include_imports contract.proto
 ``` 
 
 -I / --proto_path - basic catalog for imports in .proto files
@@ -237,6 +234,8 @@ python -m grpc_tools.protoc -I . --python_out=. --grpc_python_out=. --pyi_out=. 
 --grpc_python_out - where to generate _pb2_grpc.py
 
 --pyi_out - typing stubs (helps with autocompletion in IDE)
+
+--include_imports - useful for generating descriptor sets for reflection
 
 After running the command, you will get two files:
 
