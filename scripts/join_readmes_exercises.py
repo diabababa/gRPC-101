@@ -60,7 +60,7 @@ for index, exercise_chapter in enumerate(order):
         temp_text = f.read()
     with open(f"{target_directory}/README.md", "a") as f:
         f.write(f"{new_line * 2 if index > 0 else how_to_prepare}{temp_text}")
-    solution_path = os.path.join(f"{exercises_directory}", solutions_order[index]) if index == 6 else os.path.join(f"{solutions_directory}/{exercise_chapter}", solutions_order[index])
+    solution_path = os.path.join(f"{solutions_directory}", solutions_order[index]) if index == 6 else os.path.join(f"{solutions_directory}/{exercise_chapter}", solutions_order[index])
     with open(solution_path) as f:
         temp_text = f.read()
     temp_text = f"```{'python' if index != 0 else 'proto'}{new_line*2}{temp_text}{new_line}```"
